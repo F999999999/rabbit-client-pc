@@ -27,23 +27,25 @@ instanceWithToken.interceptors.response.use(
   },
   (error) => {
     // 处理服务器返回值是失败的状态码
-    switch (error.response && error.response.status) {
-      case 401:
-        console.log(401);
-        // 删除 用户信息
-        store.commit("user/setProfile", {});
-        // 跳转到登录页面
-        router
-          .push("/login")
-          .then(() => {
-            console.log("跳转成功");
-          })
-          .catch(() => {
-            console.log("跳转失败");
-          });
-        break;
-      default:
-        break;
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          console.log(401);
+          // 删除 用户信息
+          store.commit("user/setProfile", {});
+          // 跳转到登录页面
+          router
+            .push("/login")
+            .then(() => {
+              console.log("跳转成功");
+            })
+            .catch(() => {
+              console.log("跳转失败");
+            });
+          return;
+        default:
+          break;
+      }
     }
     // 返回错误信息
     return Promise.reject(error);
