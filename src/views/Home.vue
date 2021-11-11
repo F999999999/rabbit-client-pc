@@ -12,18 +12,47 @@
       button
     </button>
     <br />
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <button @click="onCilckHandle">发送请求</button>
+    <button @click="onCilckHandleOut">发送OutToken请求</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld.vue";
+import { requestWithToken, requestWithOutToken } from "@/utils/request";
 
 export default {
   name: "Home",
-  components: {
-    HelloWorld,
+  setup() {
+    console.log("Home");
+
+    const onCilckHandle = () => {
+      requestWithOutToken("/member/order", "get", {
+        page: 1,
+        pageSize: 10,
+      }).then(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          console.log("error", error);
+        }
+      );
+    };
+
+    const onCilckHandleOut = () => {
+      requestWithToken("/home/banner", "get", {
+        distributionSite: 1,
+      }).then(
+        (res) => {
+          console.log("res", res);
+        },
+        (error) => {
+          console.log("error", error);
+        }
+      );
+    };
+
+    return { onCilckHandle, onCilckHandleOut };
   },
 };
 </script>
