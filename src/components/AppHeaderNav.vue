@@ -43,10 +43,11 @@ export default {
     const store = useStore();
     const category = store.state.category;
 
+    // 显示当前二级导航
     const open = (id) => {
       store.commit("category/open", id);
     };
-
+    // 隐藏当前二级导航
     const close = (id) => {
       store.commit("category/close", id);
     };

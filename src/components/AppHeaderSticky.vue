@@ -2,7 +2,9 @@
   <div class="app-header-sticky" :class="{ show: scrollTop > 78 }">
     <div class="container" v-show="scrollTop > 78">
       <RouterLink to="/" class="logo" />
+      <!--导航-->
       <AppHeaderNav />
+      <!--右边区域-->
       <div class="right">
         <RouterLink to="/">品牌</RouterLink>
         <RouterLink to="/">专题</RouterLink>
