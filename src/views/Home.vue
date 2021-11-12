@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <AppLayout />
+    <AppLayout>
+      <router-view />
+    </AppLayout>
   </div>
 </template>
 
@@ -11,8 +13,6 @@ export default {
   name: "Home",
   components: { AppLayout },
   setup() {
-    console.log("Home");
-
     return {};
   },
 };
