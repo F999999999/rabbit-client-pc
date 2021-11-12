@@ -15,10 +15,12 @@ const category = {
     setCategories(state, payload) {
       state.list = payload;
     },
+    // 显示当前二级导航
     open(state, id) {
       const target = state.list.find((item) => item.id === id);
       target.open = true;
     },
+    // 隐藏当前二级导航
     close(state, id) {
       const target = state.list.find((item) => item.id === id);
       target.open = false;

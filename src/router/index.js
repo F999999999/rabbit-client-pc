@@ -6,20 +6,24 @@ import TopCategoryPage from "@/views/category/TopCategoryPage";
 import SubCategoryPage from "@/views/category/SubCategoryPage";
 
 const routes = [
+  // 首页
   {
     path: "/",
     name: "Home",
     component: HomePage,
   },
+  // 登录
   {
     path: "/login",
-    name: "login",
+    name: "Login",
     component: Login,
   },
+  // 分类
   {
     path: "/category/:id",
     component: TopCategoryPage,
   },
+  // 二级分类
   {
     path: "/category/sub/:id",
     name: "",

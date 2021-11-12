@@ -8,6 +8,7 @@
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜" />
       </div>
+      <!--购物车-->
       <div class="cart">
         <a class="curr" href="#">
           <i class="iconfont icon-cart"></i><em>2</em>
