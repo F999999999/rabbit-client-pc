@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <AppLayout />
-    <div class="box">test box</div>
   </div>
 </template>
 
@@ -19,8 +18,4 @@ export default {
 };
 </script>
 
-<style lang="less">
-.box {
-  color: @xtxColor;
-}
-</style>
+<style lang="less"></style>
