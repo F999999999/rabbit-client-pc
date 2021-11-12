@@ -30,6 +30,7 @@ instanceWithToken.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
+          // 登录失效
           console.log(401);
           // 删除 用户信息
           store.commit("user/setProfile", {});
