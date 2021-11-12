@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-const HomePage = () => import("@/views/Home.vue");
-import Login from "@/views/Login.vue";
-import TopCategoryPage from "@/views/category/TopCategoryPage";
-import SubCategoryPage from "@/views/category/SubCategoryPage";
+const HomePage = () => import("@/views/Home");
+import Login from "@/views/Login";
+import TopCategoryPage from "@/views/Category/TopCategoryPage";
+import SubCategoryPage from "@/views/Category/SubCategoryPage";
 
 const routes = [
   // 首页

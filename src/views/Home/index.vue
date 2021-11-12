@@ -1,17 +1,18 @@
 <template>
-  <div class="home">
-    <AppLayout>
-      <router-view />
-    </AppLayout>
-  </div>
+  <AppLayout>
+    <div class="container">
+      <HomePage />
+    </div>
+  </AppLayout>
 </template>
 
 <script>
 import AppLayout from "@/components/AppLayout";
+import HomePage from "@/views/Home/components/HomePage";
 
 export default {
   name: "Home",
-  components: { AppLayout },
+  components: { AppLayout, HomePage },
   setup() {
     return {};
   },

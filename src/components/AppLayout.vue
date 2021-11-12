@@ -2,6 +2,7 @@
   <AppTopNav />
   <AppHeader />
   <AppHeaderSticky />
+  <slot />
   <AppFooter />
 </template>
 
