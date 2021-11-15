@@ -16,3 +16,7 @@ export const getCategoriesApi = () => {
 export const getHotBrandApi = (limit = 10) => {
   return requestWithOutToken("/home/brand", "get", { limit });
 };
+
+export const getBannerApi = (distributionSite = 1) => {
+  return requestWithOutToken("/home/banner", "get", { distributionSite });
+};
