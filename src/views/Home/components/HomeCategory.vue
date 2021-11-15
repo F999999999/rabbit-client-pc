@@ -66,35 +66,6 @@ import { getHotBrandApi } from "@/api/home";
 export default {
   name: "HomeCategory",
   setup() {
-    // 获取前两个二级分类
-    const useMenuList = () => {
-      const store = useStore();
-      // 品牌数据
-      const brand = ref({
-        id: "brand",
-        name: "品牌",
-        children: [{ id: "child-brand", name: "推荐品牌" }],
-        brands: [],
-      });
-
-      getHotBrandApi(6).then((res) => {
-        console.log("===================", res);
-        brand.value.brands = res.result;
-      });
-      // 获取左侧分类所需数据
-      return computed(() => {
-        // 截取一级分类中的二级分类个数
-        const list = store.state.category.list.map((item) => ({
-          ...item,
-          children: item.children ? item.children.slice(0, 2) : [],
-        }));
-        // 向分类列表中添加品牌
-        list.push(brand.value);
-        // 返回处理好的分类列表数据
-        return list;
-      });
-    };
-
     // 用于存储当前用户鼠标移入的左侧一级分类
     const current = ref(null);
 
@@ -103,6 +74,34 @@ export default {
       current,
     };
   },
+};
+
+// 获取前两个二级分类
+const useMenuList = () => {
+  const store = useStore();
+  // 品牌数据
+  const brand = ref({
+    id: "brand",
+    name: "品牌",
+    children: [{ id: "child-brand", name: "推荐品牌" }],
+    brands: [],
+  });
+  // 获取品牌推荐数据
+  getHotBrandApi(6).then((res) => {
+    brand.value.brands = res.result;
+  });
+  // 获取左侧分类所需数据
+  return computed(() => {
+    // 截取一级分类中的二级分类个数
+    const list = store.state.category.list.map((item) => ({
+      ...item,
+      children: item.children ? item.children.slice(0, 2) : [],
+    }));
+    // 向分类列表中添加品牌
+    list.push(brand.value);
+    // 返回处理好的分类列表数据
+    return list;
+  });
 };
 </script>
 <style scoped lang="less">
