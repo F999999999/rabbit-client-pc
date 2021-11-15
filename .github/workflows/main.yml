@@ -1,0 +1,82 @@
+# 工作流名称（默认值：配置文件名）
+name: GitHub Actions Deploy rabbit-client-pc main
+
+# 指定触发 工作流（workflow） 的条件
+# 指定触发事件时，可以限定分支或标签
+on:
+  # 当触发 push 事件时执行工作流任务
+  push:
+    # 当分支是 main 时执行工作流任务
+    branches:
+      - main
+    # 手动触发工作流
+    workflow_dispatch:
+
+# 工作流任务
+jobs:
+  # 任务名称
+  build:
+    # 任务运行的容器类型（虚拟机环境）
+    runs-on: ubuntu-latest
+
+    # 判断在指定用户或者组织的指定仓库中才执行
+    if: github.repository == 'F999999999/rabbit-client-pc'
+    # 判断在指定用户或者组织中才执行
+    # if: github.repository_owner == '用户名（组织名）'
+
+    # 指定任务执行的命令
+    steps:
+      # 检出代码
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          # 是否在git config 中持久化token（默认值：true）
+          persist-credentials: false
+
+      # 设置 node 环境变量
+      - name: Setup Node.js ⚙
+        uses: actions/setup-node@v1
+        with:
+          # 需要使用的 node 版本
+          node-version: '14'
+
+      # 缓存 node_modules
+      - name: Cache dependencies 📦
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # 如果缓存没有命中，安装依赖
+      - name: Install dependencies 🔧
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn --frozen-lockfile
+
+      # 运行构建脚本
+      - name: Build ⏳
+        run: yarn build
+
+      # 部署到服务器
+      - name: Deploy 🚀
+        # 构建
+        uses: easingthemes/ssh-deploy@v2.1.5
+        # 该步骤所需的环境变量
+        env:
+          # 服务器 SSH 私钥
+          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
+          # 服务器地址(IP或者域名)
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          # 服务器用户名
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          # 服务器部署路径
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          # 源目录（打包的目录）
+          SOURCE: "dist/"
+          # rsync flags（默认值："-rltgoDzvO"）
+          # --delete 删除那些目标目录中有而源目录中没有的多余文件
+          # --exclude 排除目标目录中那些被该选项指定的文件
+          ARGS: "-rltgoDzvO --delete --exclude '.user.ini'"
