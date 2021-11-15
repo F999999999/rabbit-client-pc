@@ -2,7 +2,7 @@
   <div class="home-category" @mouseleave="current = null">
     <ul class="menu">
       <li
-        :class="{ active: current && current.id === topCategory.id }"
+        :class="{ active: current?.id && current.id === topCategory.id }"
         v-for="topCategory in menuList"
         :key="topCategory.id"
         @mouseenter="current = topCategory"
