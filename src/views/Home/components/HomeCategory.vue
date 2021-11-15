@@ -7,16 +7,37 @@
         :key="topCategory.id"
         @mouseenter="current = topCategory"
       >
+        <!-- 一级分类 -->
         <RouterLink :to="`/category/${topCategory.id}`">
           {{ topCategory.name }}
         </RouterLink>
-        <RouterLink
-          :to="`/category/sub/${subCategory.id}`"
-          v-for="subCategory in topCategory?.children"
-          :key="subCategory.id"
-        >
-          {{ subCategory.name }}
-        </RouterLink>
+        <!-- 二级分类 -->
+        <!-- 如果有二级数据显示二级数据 -->
+        <template v-if="topCategory.children?.length">
+          <RouterLink
+            :to="`/category/sub/${subCategory.id}`"
+            v-for="subCategory in topCategory?.children"
+            :key="subCategory.id"
+          >
+            {{ subCategory.name }}
+          </RouterLink>
+        </template>
+        <!-- 否则显示骨架屏 -->
+        <template v-else>
+          <XtxSkeleton
+            animated="fade"
+            width="60px"
+            height="18px"
+            bg="rgba(255,255,255,0.2)"
+            style="margin-right: 5px"
+          ></XtxSkeleton>
+          <XtxSkeleton
+            animated="fade"
+            width="60px"
+            height="18px"
+            bg="rgba(255,255,255,0.2)"
+          ></XtxSkeleton>
+        </template>
       </li>
     </ul>
     <!-- 右侧弹层 -->
@@ -62,9 +83,13 @@
 import { useStore } from "vuex";
 import { computed, ref } from "vue";
 import { getHotBrandApi } from "@/api/home";
+import XtxSkeleton from "@/components/library/XtxSkeleton";
 
 export default {
   name: "HomeCategory",
+  components: {
+    XtxSkeleton,
+  },
   setup() {
     // 用于存储当前用户鼠标移入的左侧一级分类
     const current = ref(null);
