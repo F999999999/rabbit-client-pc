@@ -70,7 +70,7 @@
                 <i class="iconfont icon-dingwei"></i>{{ brand.place }}
               </p>
               <p class="name ellipsis">{{ brand.name }}</p>
-              <p class="desc ellipsis-2">{{ brand.nameEn }}</p>
+              <p class="desc ellipsis-2">{{ brand.desc }}</p>
             </div>
           </RouterLink>
         </li>
@@ -217,6 +217,25 @@ const useMenuList = () => {
               i {
                 font-size: 16px;
               }
+            }
+          }
+        }
+      }
+
+      li.brand {
+        height: 180px;
+        a {
+          align-items: flex-start;
+          img {
+            width: 120px;
+            height: 160px;
+          }
+          .info {
+            p {
+              margin-top: 8px;
+            }
+            .place {
+              color: #999;
             }
           }
         }
