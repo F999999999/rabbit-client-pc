@@ -66,7 +66,7 @@ const generateRequestConfig = (url, method, data) => {
   return {
     url,
     method,
-    [method === "get" ? "prams" : "data"]: data,
+    [method === "get" ? "params" : "data"]: data,
   };
 };
 
