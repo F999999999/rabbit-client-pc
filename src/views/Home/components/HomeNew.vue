@@ -33,7 +33,7 @@ export default {
 
 const useNewGoods = () => {
   const goods = ref();
-  getNewGoodsApi(6).then((res) => {
+  getNewGoodsApi().then((res) => {
     goods.value = res.result;
   });
   return goods;
