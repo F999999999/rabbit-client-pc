@@ -5,7 +5,7 @@ import XtxMore from "@/components/library/XtxMore";
 const library = {
   install(app) {
     // 骨架屏
-    app.component(XtxSkeleton, name, XtxSkeleton);
+    app.component(XtxSkeleton.name, XtxSkeleton);
     // 轮播图
     app.component(XtxCarousel.name, XtxCarousel);
     // 查看更多
