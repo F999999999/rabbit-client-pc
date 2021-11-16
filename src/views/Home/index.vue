@@ -10,6 +10,8 @@
     <HomeNew />
     <!-- 人气推荐 -->
     <HomeHot />
+    <!-- 热门品牌 -->
+    <HomeBrand />
   </AppLayout>
 </template>
 
@@ -19,10 +21,12 @@ import HomeCategory from "@/views/Home/components/HomeCategory";
 import HomeBanner from "@/views/Home/components/HomeBanner";
 import HomeNew from "@/views/Home/components/HomeNew";
 import HomeHot from "@/views/Home/components/HomeHot";
+import HomeBrand from "@/views/Home/components/HomeBrand";
 
 export default {
   name: "Home",
   components: {
+    HomeBrand,
     AppLayout,
     HomeCategory,
     HomeBanner,
