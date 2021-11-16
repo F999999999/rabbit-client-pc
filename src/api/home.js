@@ -10,13 +10,27 @@ export const getCategoriesApi = () => {
 
 /**
  * 获取热门品牌数据
- * @property {number} limit 获取数量
+ * @property {number} limit 限制获取的数量
  * @returns {Promise}
  */
 export const getHotBrandApi = (limit = 10) => {
   return requestWithOutToken("/home/brand", "get", { limit });
 };
 
+/**
+ * 获取轮播图数据
+ * @param distributionSite 投放位置 1.首页 2.分类商品页（默认：1）
+ * @returns {Promise}
+ */
 export const getBannerApi = (distributionSite = 1) => {
   return requestWithOutToken("/home/banner", "get", { distributionSite });
+};
+
+/**
+ * 获取新鲜好物
+ * @param limit 限制获取的数量
+ * @returns {Promise}
+ */
+export const getNewGoods = (limit) => {
+  return requestWithOutToken("/home/new", "get", { limit });
 };
