@@ -12,17 +12,21 @@ const useLazyData = (apiFunction) => {
   // 创建用于存储数据的变量
   const result = ref();
   // 监听元素是否进入可视区
-  const { stop } = useIntersectionObserver(target, ([{ isIntersecting }]) => {
-    // 如果元素进入可视区，则获取数据
-    if (isIntersecting) {
-      // 停止监听
-      stop();
-      // 如果数据已经获取过，则直接返回
-      if (result.value) return;
-      // 否则获取数据
-      apiFunction().then((data) => (result.value = data.result));
-    }
-  });
+  const { stop } = useIntersectionObserver(
+    target,
+    ([{ isIntersecting }]) => {
+      // 如果元素进入可视区，则获取数据
+      if (isIntersecting) {
+        // 停止监听
+        stop();
+        // 如果数据已经获取过，则直接返回
+        if (result.value) return;
+        // 否则获取数据
+        apiFunction().then((data) => (result.value = data.result));
+      }
+    },
+    { threshold: 0 }
+  );
   // 返回数据及元素
   return {
     target,
