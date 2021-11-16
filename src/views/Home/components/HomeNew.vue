@@ -33,7 +33,6 @@ export default {
   setup() {
     // 监听元素进入可视区时加载新鲜好物数据
     const { target, result: goodsData } = useLazyData(getNewGoodsApi);
-    console.log(goodsData.value);
     return { goodsData, target };
   },
 };

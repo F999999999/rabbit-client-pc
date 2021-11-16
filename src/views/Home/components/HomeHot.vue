@@ -1,7 +1,7 @@
 <template>
   <HomePanel title="人气推荐" sub-title="人气爆款 不容错过" ref="target">
-    <ul class="goods-list" v-if="hot">
-      <li v-for="item in hot" :key="item.id">
+    <ul class="goods-list" v-if="hotData">
+      <li v-for="item in hotData" :key="item.id">
         <RouterLink to="/">
           <img :src="item.picture" :alt="item.title" />
           <p class="name">{{ item.title }}</p>
@@ -12,7 +12,7 @@
     <!-- 骨架屏动画 -->
     <Transition name="fade">
       <!-- 骨架屏 -->
-      <HomeSkeleton v-if="!hot" />
+      <HomeSkeleton v-if="!hotData" />
     </Transition>
   </HomePanel>
 </template>
@@ -26,8 +26,8 @@ export default {
   name: "HomeHot",
   components: { HomeSkeleton, HomePanel },
   setup() {
-    const { target, result: hot } = useLazyData(getHotGoodsApi);
-    return { hot, target };
+    const { target, result: hotData } = useLazyData(getHotGoodsApi);
+    return { hotData, target };
   },
 };
 </script>
