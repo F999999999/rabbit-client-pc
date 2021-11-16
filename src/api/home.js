@@ -31,6 +31,6 @@ export const getBannerApi = (distributionSite = 1) => {
  * @param limit 限制获取的数量
  * @returns {Promise}
  */
-export const getNewGoods = (limit) => {
+export const getNewGoodsApi = (limit) => {
   return requestWithOutToken("/home/new", "get", { limit });
 };

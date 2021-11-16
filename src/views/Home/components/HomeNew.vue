@@ -19,7 +19,7 @@
 <script>
 import HomePanel from "@/views/Home/components/HomePanel";
 import { ref } from "vue";
-import { getNewGoods } from "@/api/home";
+import { getNewGoodsApi } from "@/api/home";
 
 export default {
   name: "HomeNew",
@@ -33,7 +33,7 @@ export default {
 
 const useNewGoods = () => {
   const goods = ref();
-  getNewGoods().then((res) => {
+  getNewGoodsApi(6).then((res) => {
     goods.value = res.result;
   });
   return goods;
