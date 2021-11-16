@@ -34,3 +34,11 @@ export const getBannerApi = (distributionSite = 1) => {
 export const getNewGoodsApi = (limit) => {
   return requestWithOutToken("/home/new", "get", { limit });
 };
+
+/**
+ * 获取人气推荐
+ * @returns {Promise}
+ */
+export const getHotGoodsApi = () => {
+  return requestWithOutToken("/home/hot", "get");
+};

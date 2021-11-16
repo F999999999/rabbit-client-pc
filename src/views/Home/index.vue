@@ -8,6 +8,8 @@
     </div>
     <!-- 新鲜好物 -->
     <HomeNew />
+    <!-- 人气推荐 -->
+    <HomeHot />
   </AppLayout>
 </template>
 
@@ -16,6 +18,7 @@ import AppLayout from "@/components/AppLayout";
 import HomeCategory from "@/views/Home/components/HomeCategory";
 import HomeBanner from "@/views/Home/components/HomeBanner";
 import HomeNew from "@/views/Home/components/HomeNew";
+import HomeHot from "@/views/Home/components/HomeHot";
 
 export default {
   name: "Home",
@@ -24,6 +27,7 @@ export default {
     HomeCategory,
     HomeBanner,
     HomeNew,
+    HomeHot,
   },
 };
 </script>
