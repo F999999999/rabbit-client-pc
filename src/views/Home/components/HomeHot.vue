@@ -1,5 +1,5 @@
 <template>
-  <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
+  <HomePanel title="人气推荐" sub-title="人气爆款 不容错过" ref="target">
     <ul class="goods-list" v-if="homeHot">
       <li v-for="item in homeHot" :key="item.id">
         <RouterLink to="/">
@@ -15,22 +15,14 @@
 <script>
 import HomePanel from "@/views/Home/components/HomePanel";
 import { getHotGoodsApi } from "@/api/home";
-import { ref } from "vue";
+import useLazyData from "@/hooks/useLazyData";
 export default {
   name: "HomeHot",
   components: { HomePanel },
   setup() {
-    const homeHot = useHotGoods();
-    return { homeHot };
+    const { target, result: homeHot } = useLazyData(getHotGoodsApi);
+    return { homeHot, target };
   },
-};
-
-const useHotGoods = () => {
-  const homeHot = ref();
-  getHotGoodsApi().then((res) => {
-    homeHot.value = res.result;
-  });
-  return homeHot;
 };
 </script>
 <style scoped lang="less">

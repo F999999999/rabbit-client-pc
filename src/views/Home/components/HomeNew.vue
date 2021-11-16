@@ -1,5 +1,5 @@
 <template>
-  <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱">
+  <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱" ref="target">
     <template v-slot:right>
       <XtxMore />
     </template>
@@ -18,25 +18,19 @@
 </template>
 <script>
 import HomePanel from "@/views/Home/components/HomePanel";
-import { ref } from "vue";
+// import { ref } from "vue";
 import { getNewGoodsApi } from "@/api/home";
+import useLazyData from "@/hooks/useLazyData";
 
 export default {
   name: "HomeNew",
   components: { HomePanel },
   setup() {
-    const goods = useNewGoods();
-    console.log(goods.value, "goods");
-    return { goods };
-  },
-};
+    // 监听元素进入可视区时加载新鲜好物数据
+    const { target, result: goods } = useLazyData(getNewGoodsApi);
 
-const useNewGoods = () => {
-  const goods = ref();
-  getNewGoodsApi().then((res) => {
-    goods.value = res.result;
-  });
-  return goods;
+    return { goods, target };
+  },
 };
 </script>
 <style scoped lang="less">
