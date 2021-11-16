@@ -4,8 +4,8 @@
       <XtxMore />
     </template>
     <template v-slot:default>
-      <ul class="goods-list" v-if="goods">
-        <li v-for="item in goods" :key="item.id">
+      <ul class="goods-list" v-if="goodsData">
+        <li v-for="item in goodsData" :key="item.id">
           <RouterLink to="/">
             <img :src="item.picture" :alt="item.name" />
             <p class="name ellipsis">{{ item.name }}</p>
@@ -13,23 +13,28 @@
           </RouterLink>
         </li>
       </ul>
+      <!-- 骨架屏动画 -->
+      <Transition name="fade">
+        <!-- 骨架屏 -->
+        <HomeSkeleton v-if="!goodsData" />
+      </Transition>
     </template>
   </HomePanel>
 </template>
 <script>
 import HomePanel from "@/views/Home/components/HomePanel";
-// import { ref } from "vue";
 import { getNewGoodsApi } from "@/api/home";
 import useLazyData from "@/hooks/useLazyData";
+import HomeSkeleton from "@/views/Home/components/HomeSkeleton";
 
 export default {
   name: "HomeNew",
-  components: { HomePanel },
+  components: { HomeSkeleton, HomePanel },
   setup() {
     // 监听元素进入可视区时加载新鲜好物数据
-    const { target, result: goods } = useLazyData(getNewGoodsApi);
-
-    return { goods, target };
+    const { target, result: goodsData } = useLazyData(getNewGoodsApi);
+    console.log(goodsData.value);
+    return { goodsData, target };
   },
 };
 </script>
@@ -56,5 +61,9 @@ export default {
       color: @priceColor;
     }
   }
+}
+
+.fade-leave-active {
+  top: 115px;
 }
 </style>
