@@ -26,6 +26,7 @@ export default {
   name: "HomeHot",
   components: { HomeSkeleton, HomePanel },
   setup() {
+    // 懒加载数据
     const { target, result: hotData } = useLazyData(getHotGoodsApi);
     return { hotData, target };
   },
