@@ -42,10 +42,19 @@ export const getNewGoodsApi = (limit) => {
 export const getHotGoodsApi = () => {
   return requestWithOutToken("/home/hot", "get");
 };
+
 /**
  * 获取产品区块数据
  * @returns {Promise}
  */
 export const getProductsApi = () => {
   return requestWithOutToken("/home/goods", "get");
+};
+
+/**
+ * 获取最新专题数据
+ * @returns {Promise}
+ */
+export const getSpecialApi = (limit) => {
+  return requestWithOutToken("/home/special", "get", { limit });
 };
