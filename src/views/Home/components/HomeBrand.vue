@@ -17,6 +17,7 @@
         <ul
           class="list"
           :style="{ transform: `translateX(${-currentIndex * 1240}px)` }"
+          v-if="brandData"
         >
           <li v-for="item in brandData" :key="item.id">
             <RouterLink to="/">
@@ -24,6 +25,21 @@
             </RouterLink>
           </li>
         </ul>
+        <!-- 骨架屏动画 -->
+        <transition name="fade">
+          <!-- 骨架屏 -->
+          <div class="skeleton" v-if="!brandData">
+            <xtx-skeleton
+              class="item"
+              v-for="i in 5"
+              :key="i"
+              animated="scroll"
+              bg="#e4e4e4"
+              width="240px"
+              height="305px"
+            />
+          </div>
+        </transition>
       </div>
     </template>
   </HomePanel>
@@ -110,5 +126,20 @@ const useToggle = (length = 10) => {
       }
     }
   }
+}
+
+// 骨架屏
+.skeleton {
+  width: 100%;
+  display: flex;
+  .item {
+    margin-right: 10px;
+    &:nth-child(5n) {
+      margin-right: 0;
+    }
+  }
+}
+.fade-leave-active {
+  top: 115px;
 }
 </style>
