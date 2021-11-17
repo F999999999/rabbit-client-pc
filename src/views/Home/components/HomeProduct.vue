@@ -16,7 +16,7 @@
       <template v-slot:default>
         <div class="box">
           <RouterLink class="cover" to="/">
-            <img :src="item.picture" :alt="item.name" />
+            <img src="" v-lazy="item.picture" :alt="item.name" />
             <strong class="label">
               <span>{{ item.name }}馆</span>
               <span>{{ item.saleInfo }}</span>
