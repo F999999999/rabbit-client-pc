@@ -1,25 +1,22 @@
-import XtxSkeleton from "@/components/library/XtxSkeleton";
-import XtxCarousel from "@/components/library/XtxCarousel";
-import XtxMore from "@/components/library/XtxMore";
-import XtxBread from "@/components/library/XtxBread";
-import XtxBreadItem from "@/components/library/XtxBreadItem";
+// 批量导入模块 返回值是一个导入函数
+// require.context(目录,是否查找子目录,用于查找文件名的正则表达式)
+const importFn = require.context("./", false, /\.vue&/);
+// 使用导入函数的 keys 方法获取所有匹配成功的文件路径数组
+const keys = importFn.keys();
+
 import lazy from "@/components/directive/lazy";
 
-const library = {
+export default {
   install(app) {
-    // 骨架屏
-    app.component(XtxSkeleton.name, XtxSkeleton);
-    // 轮播图
-    app.component(XtxCarousel.name, XtxCarousel);
-    // 查看更多
-    app.component(XtxMore.name, XtxMore);
-    // 面包屑导航
-    app.component(XtxBread.name, XtxBread);
-    // 面包屑导航项目
-    app.component(XtxBreadItem.name, XtxBreadItem);
+    // 遍历文件路径
+    keys.forEach((key) => {
+      // 导入组件
+      const component = importFn(key).default;
+      // 注册组件
+      app.component(component.name, component);
+    });
+
     // 图片懒加载
     app.directive("lazy", lazy);
   },
 };
-
-export default library;
