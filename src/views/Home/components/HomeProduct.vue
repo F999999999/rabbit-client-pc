@@ -1,6 +1,6 @@
 <template>
   <div class="home-product" ref="target">
-    <HomePanel title="生鲜" v-for="item in goodsData" :key="item.id">
+    <HomePanel :title="item.name" v-for="item in goodsData" :key="item.id">
       <template v-slot:right>
         <div class="sub">
           <RouterLink
