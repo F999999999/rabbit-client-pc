@@ -9,10 +9,7 @@
         </XtxBreadItem>
         <Transition name="fade-right" mode="out-in">
           <!-- 面包屑动画 -->
-          <XtxBreadItem
-            :path="`/category/sub/${category?.subCategory?.id}`"
-            :key="category?.subCategory?.id"
-          >
+          <XtxBreadItem :key="category?.subCategory?.id">
             {{ category?.subCategory?.name }}
           </XtxBreadItem>
         </Transition>
