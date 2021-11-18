@@ -1,14 +1,21 @@
 <template>
   <AppLayout>
     <div class="container">
+      <!-- 面包屑导航 -->
       <XtxBread>
         <XtxBreadItem path="/">首页</XtxBreadItem>
         <XtxBreadItem :path="`/category/${category?.topCategory?.id}`">
           {{ category?.topCategory?.name }}
         </XtxBreadItem>
-        <XtxBreadItem :path="`/category/sub/${category?.subCategory?.id}`">
-          {{ category?.subCategory?.name }}
-        </XtxBreadItem>
+        <Transition name="fade-right" mode="out-in">
+          <!-- 面包屑动画 -->
+          <XtxBreadItem
+            :path="`/category/sub/${category?.subCategory?.id}`"
+            :key="category?.subCategory?.id"
+          >
+            {{ category?.subCategory?.name }}
+          </XtxBreadItem>
+        </Transition>
       </XtxBread>
     </div>
   </AppLayout>
