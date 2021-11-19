@@ -33,6 +33,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHashHistory(),
+  scrollBehavior: () => ({ top: 0 }),
   routes,
 });
 
