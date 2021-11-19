@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
 import { getSubCategoryFilterByIdApi } from "@/api/category";
 
@@ -56,22 +56,29 @@ const useSubCategoryFilter = (emit) => {
   // 所有筛选条件数据
   const filters = ref(null);
   // 获取筛选条件
-  getSubCategoryFilterByIdApi(route.params.id).then((res) => {
-    // 在品牌筛选条件的前面加上 全部 筛选选项
-    res.result.brands.unshift({ id: null, name: "全部" });
-    // 当前被选择的筛选品牌id
-    res.result.selectedBrandId = null;
+  const getSubCategoryFilterById = (id) => {
+    // 获取筛选条件数据
+    getSubCategoryFilterByIdApi(id).then((res) => {
+      // 在品牌筛选条件的前面加上 全部 筛选选项
+      res.result.brands.unshift({ id: null, name: "全部" });
+      // 当前被选择的筛选品牌id
+      res.result.selectedBrandId = null;
 
-    res.result.saleProperties.forEach((item) => {
-      // 在其他筛选条件的前面加上 全部 筛选选项
-      item.properties.unshift({ id: null, name: "全部" });
-      // 当前被选择的筛选条件
-      item.selectedFilterName = "全部";
+      res.result.saleProperties.forEach((item) => {
+        // 在其他筛选条件的前面加上 全部 筛选选项
+        item.properties.unshift({ id: null, name: "全部" });
+        // 当前被选择的筛选条件
+        item.selectedFilterName = "全部";
+      });
+
+      // 存储筛选条件
+      filters.value = res.result;
     });
-
-    // 存储筛选条件
-    filters.value = res.result;
-  });
+  };
+  // 初始化筛选条件数据
+  getSubCategoryFilterById(route.params.id);
+  // 当前路由更新前执行
+  onBeforeRouteUpdate((to) => getSubCategoryFilterById(to.params.id));
 
   // 用户选择的筛选条件
   const selectedFilters = {
