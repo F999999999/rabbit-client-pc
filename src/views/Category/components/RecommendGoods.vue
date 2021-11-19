@@ -15,7 +15,7 @@
 import GoodsItem from "@/views/Category/components/GoodsItem";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
-import { getTopCategoryById } from "@/api/category";
+import { getTopCategoryByIdApi } from "@/api/category";
 
 export default {
   name: "RecommendGoods",
@@ -28,7 +28,7 @@ export default {
     // 获取一级分类数据
     const useGetTopCategoryById = (id) => {
       // 获取一级分类并存储
-      getTopCategoryById(id).then((res) => {
+      getTopCategoryByIdApi(id).then((res) => {
         console.log(res);
         topCategory.value = res.result;
       });
