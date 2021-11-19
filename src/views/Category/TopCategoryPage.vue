@@ -17,6 +17,8 @@
       <XtxCarousel :carousels="banners" style="height: 500px" />
       <!-- 二级分类列表 -->
       <ShowSubCategoryList :subCategories="category.children" v-if="category" />
+      <!-- 推荐商品 -->
+      <RecommendGoods />
     </div>
   </AppLayout>
 </template>
@@ -28,10 +30,11 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 import useBanners from "@/hooks/useBanners";
 import ShowSubCategoryList from "@/views/Category/components/ShowSubCategoryList";
+import RecommendGoods from "@/views/Category/components/RecommendGoods";
 
 export default {
   name: "TopCategory",
-  components: { ShowSubCategoryList, AppLayout },
+  components: { RecommendGoods, ShowSubCategoryList, AppLayout },
   setup() {
     // 一级导航数据
     const category = useBread();
