@@ -1,24 +1,3 @@
-# rabbit-client-pc
+# rabbit-client-pc 小兔鲜 PC端
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<img src="https://tva1.sinaimg.cn/large/005LtIx3gy1gwkihepo9uj31gv4twnpi.jpg"/>
