@@ -15,6 +15,8 @@
       </XtxBread>
       <!-- 轮播图 -->
       <XtxCarousel :carousels="banners" style="height: 500px" />
+      <!-- 二级分类列表 -->
+      <ShowSubCategoryList :subCategories="category.children" v-if="category" />
     </div>
   </AppLayout>
 </template>
@@ -25,10 +27,11 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import useBanners from "@/hooks/useBanners";
+import ShowSubCategoryList from "@/views/Category/components/ShowSubCategoryList";
 
 export default {
   name: "TopCategory",
-  components: { AppLayout },
+  components: { ShowSubCategoryList, AppLayout },
   setup() {
     // 一级导航数据
     const category = useBread();
