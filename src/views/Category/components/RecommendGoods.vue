@@ -13,21 +13,33 @@
 
 <script>
 import GoodsItem from "@/views/Category/components/GoodsItem";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
 import { getTopCategoryById } from "@/api/category";
+
 export default {
   name: "RecommendGoods",
   components: { GoodsItem },
   setup() {
     // 获取路由信息
     const route = useRoute();
-    // 一级分类信息
+    // 一级分类数据
     const topCategory = ref(null);
-    // 获取一级分类并存储
-    getTopCategoryById(route.params.id).then((res) => {
-      console.log(res);
-      topCategory.value = res.result;
+    // 获取一级分类数据
+    const useGetTopCategoryById = (id) => {
+      // 获取一级分类并存储
+      getTopCategoryById(id).then((res) => {
+        console.log(res);
+        topCategory.value = res.result;
+      });
+    };
+    // 首次进入时获取一级分类数据
+    useGetTopCategoryById(route.params.id);
+
+    // 当前路由更新前执行
+    onBeforeRouteUpdate((to) => {
+      // 更新一级分类数据
+      useGetTopCategoryById(to.params.id);
     });
 
     return { topCategory };
