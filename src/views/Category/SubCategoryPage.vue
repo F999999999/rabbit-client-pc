@@ -16,7 +16,6 @@
       </XtxBread>
       <!-- 筛选条件 -->
       <SubFilter @onFilterParamsChanged="onParamsChanged" />
-      <button @click="onParamsChanged" />
     </div>
   </AppLayout>
 </template>
