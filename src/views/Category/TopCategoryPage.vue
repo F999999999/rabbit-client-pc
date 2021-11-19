@@ -13,6 +13,8 @@
           </XtxBreadItem>
         </Transition>
       </XtxBread>
+      <!-- 轮播图 -->
+      <XtxCarousel :carousels="banners" style="height: 500px" />
     </div>
   </AppLayout>
 </template>
@@ -22,14 +24,19 @@ import AppLayout from "@/components/AppLayout";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { computed } from "vue";
+import useBanners from "@/hooks/useBanners";
 
 export default {
   name: "TopCategory",
   components: { AppLayout },
   setup() {
+    // 一级导航数据
     const category = useBread();
+    // 轮播图数据
+    const { banners, getData } = useBanners();
+    getData();
 
-    return { category };
+    return { category, banners };
   },
 };
 
