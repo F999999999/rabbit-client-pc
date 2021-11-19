@@ -1,6 +1,6 @@
 <template>
   <!-- 筛选区 -->
-  <div class="sub-filter" v-if="filters">
+  <div class="sub-filter" v-if="filters && !filtersLoading">
     <div class="item">
       <div class="head">品牌：</div>
       <div class="body">
@@ -34,6 +34,14 @@
       </div>
     </div>
   </div>
+  <!-- 骨架屏 -->
+  <div class="sub-filter" v-else>
+    <XtxSkeleton class="item" width="800px" height="40px" />
+    <XtxSkeleton class="item" width="800px" height="40px" />
+    <XtxSkeleton class="item" width="600px" height="40px" />
+    <XtxSkeleton class="item" width="600px" height="40px" />
+    <XtxSkeleton class="item" width="600px" height="40px" />
+  </div>
 </template>
 <script>
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
@@ -43,9 +51,10 @@ import { getSubCategoryFilterByIdApi } from "@/api/category";
 export default {
   name: "SubFilter",
   setup(props, { emit }) {
-    const { filters, updateSelectedFilters } = useSubCategoryFilter(emit);
+    const { filters, updateSelectedFilters, filtersLoading } =
+      useSubCategoryFilter(emit);
 
-    return { filters, updateSelectedFilters };
+    return { filters, updateSelectedFilters, filtersLoading };
   },
 };
 
@@ -55,10 +64,18 @@ const useSubCategoryFilter = (emit) => {
   const route = useRoute();
   // 所有筛选条件数据
   const filters = ref(null);
+  // 筛选条件数据是否正在加载
+  const filtersLoading = ref(false);
   // 获取筛选条件
   const getSubCategoryFilterById = (id) => {
+    // 更新筛选数据的加载状态为正在加载
+    filtersLoading.value = true;
+
     // 获取筛选条件数据
     getSubCategoryFilterByIdApi(id).then((res) => {
+      // 更新筛选数据的加载状态为数据加载完成
+      filtersLoading.value = false;
+
       // 在品牌筛选条件的前面加上 全部 筛选选项
       res.result.brands.unshift({ id: null, name: "全部" });
       // 当前被选择的筛选品牌id
@@ -109,7 +126,7 @@ const useSubCategoryFilter = (emit) => {
     emit("onFilterChanged", selectedFilters);
   };
 
-  return { filters, updateSelectedFilters };
+  return { filters, updateSelectedFilters, filtersLoading };
 };
 </script>
 <style scoped lang="less">
@@ -137,5 +154,9 @@ const useSubCategoryFilter = (emit) => {
       }
     }
   }
+}
+
+.xtx-skeleton {
+  padding: 10px 0;
 }
 </style>
