@@ -1,6 +1,6 @@
 // 批量导入模块 返回值是一个导入函数
 // require.context(目录,是否查找子目录,用于查找文件名的正则表达式)
-const importFn = require.context("./", false, /\.vue&/);
+const importFn = require.context("./", false, /\.vue$/);
 // 使用导入函数的 keys 方法获取所有匹配成功的文件路径数组
 const keys = importFn.keys();
 
