@@ -14,6 +14,9 @@
           </XtxBreadItem>
         </Transition>
       </XtxBread>
+      <!-- 筛选条件 -->
+      <SubFilter @onFilterParamsChanged="onParamsChanged" />
+      <button @click="onParamsChanged" />
     </div>
   </AppLayout>
 </template>
@@ -23,14 +26,20 @@ import AppLayout from "@/components/AppLayout";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { computed } from "vue";
+import SubFilter from "@/views/Category/components/SubFilter";
 
 export default {
   name: "SubCategory",
-  components: { AppLayout },
+  components: { SubFilter, AppLayout },
   setup() {
     const category = useBread();
-    console.log(category.value);
-    return { category };
+
+    // 获取用户选择的筛选条件
+    const onParamsChanged = (target) => {
+      console.log(target);
+    };
+
+    return { category, onParamsChanged };
   },
 };
 
