@@ -1,46 +1,48 @@
 <template>
-  <!-- 筛选区 -->
-  <div class="sub-filter" v-if="filters && !filtersLoading">
-    <div class="item">
-      <div class="head">品牌：</div>
-      <div class="body">
-        <a
-          v-for="brand in filters.brands"
-          :key="brand.id"
-          @click="
-            filters.selectedBrandId = brand.id;
-            updateSelectedFilters();
-          "
-          :class="{ active: filters.selectedBrandId === brand.id }"
-        >
-          {{ brand.name }}
-        </a>
+  <div>
+    <!-- 筛选区 -->
+    <div class="sub-filter" v-if="filters && !filtersLoading">
+      <div class="item">
+        <div class="head">品牌：</div>
+        <div class="body">
+          <a
+            v-for="brand in filters.brands"
+            :key="brand.id"
+            @click="
+              filters.selectedBrandId = brand.id;
+              updateSelectedFilters();
+            "
+            :class="{ active: filters.selectedBrandId === brand.id }"
+          >
+            {{ brand.name }}
+          </a>
+        </div>
+      </div>
+      <div class="item" v-for="item in filters.saleProperties" :key="item.id">
+        <div class="head">{{ item.name }}：</div>
+        <div class="body">
+          <a
+            v-for="property in item.properties"
+            :key="property.id"
+            @click="
+              item.selectedFilterName = property.name;
+              updateSelectedFilters();
+            "
+            :class="{ active: item.selectedFilterName === property.name }"
+          >
+            {{ property.name }}
+          </a>
+        </div>
       </div>
     </div>
-    <div class="item" v-for="item in filters.saleProperties" :key="item.id">
-      <div class="head">{{ item.name }}：</div>
-      <div class="body">
-        <a
-          v-for="property in item.properties"
-          :key="property.id"
-          @click="
-            item.selectedFilterName = property.name;
-            updateSelectedFilters();
-          "
-          :class="{ active: item.selectedFilterName === property.name }"
-        >
-          {{ property.name }}
-        </a>
-      </div>
+    <!-- 骨架屏 -->
+    <div class="sub-filter" v-else>
+      <XtxSkeleton class="item" width="800px" height="40px" />
+      <XtxSkeleton class="item" width="800px" height="40px" />
+      <XtxSkeleton class="item" width="600px" height="40px" />
+      <XtxSkeleton class="item" width="600px" height="40px" />
+      <XtxSkeleton class="item" width="600px" height="40px" />
     </div>
-  </div>
-  <!-- 骨架屏 -->
-  <div class="sub-filter" v-else>
-    <XtxSkeleton class="item" width="800px" height="40px" />
-    <XtxSkeleton class="item" width="800px" height="40px" />
-    <XtxSkeleton class="item" width="600px" height="40px" />
-    <XtxSkeleton class="item" width="600px" height="40px" />
-    <XtxSkeleton class="item" width="600px" height="40px" />
   </div>
 </template>
 <script>
