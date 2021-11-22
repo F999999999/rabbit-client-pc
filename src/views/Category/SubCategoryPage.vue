@@ -21,6 +21,12 @@
         <SubSort @onSortParamsChanged="onFilterSortParamsChanged" />
         <!-- 商品列表 -->
         <GoodsList :goods="goodsData.items" v-if="goodsData" />
+        <!-- 无限加载组件 -->
+        <XtxInfiniteLoading
+          :loading="loading"
+          :finished="finished"
+          @infinite="loadMore"
+        />
       </div>
     </div>
   </AppLayout>
@@ -44,9 +50,22 @@ export default {
     const category = useBread();
 
     // 获取商品数据
-    const { goodsData, onFilterSortParamsChanged } = useGoods();
+    const {
+      goodsData,
+      onFilterSortParamsChanged,
+      loading,
+      finished,
+      loadMore,
+    } = useGoods();
 
-    return { category, goodsData, onFilterSortParamsChanged };
+    return {
+      category,
+      goodsData,
+      onFilterSortParamsChanged,
+      loading,
+      finished,
+      loadMore,
+    };
   },
 };
 
@@ -89,13 +108,39 @@ const useGoods = () => {
   // 请求参数
   const reqParams = ref({
     categoryId: route.params.id,
+    // 当前页
+    page: 1,
+    // 每次请求获取的数据数量
+    pageSize: 10,
   });
+  // 当前是否处于加载状态
+  const loading = ref(false);
+  // 是否已加载完所有数据
+  const finished = ref(false);
   // 获取商品数据的方法
   const getGoods = () => {
+    // 数据加载中
+    loading.value = true;
     // 获取商品数据
     getGoodsList(reqParams.value).then((res) => {
-      console.log(res);
-      goodsData.value = res.result;
+      // 数据加载完成
+      loading.value = false;
+      // 判断是否是第一页
+      if (reqParams.value.page === 1) {
+        // 直接赋值
+        goodsData.value = res.result;
+      } else {
+        // 否则追加到数据后面
+        goodsData.value = {
+          ...res.result,
+          items: [...goodsData.value.items, ...res.result.items],
+        };
+      }
+      // 判断是否是最后一页
+      if (reqParams.value.page === res.result.pages) {
+        // 已加载完所有数据
+        finished.value = true;
+      }
     });
   };
   // 监听请求参数的变化
@@ -110,6 +155,14 @@ const useGoods = () => {
       immediate: true,
     }
   );
+  // 加载更多数据
+  const loadMore = () => {
+    // 页码 +1
+    reqParams.value = {
+      ...reqParams.value,
+      page: reqParams.value.page + 1,
+    };
+  };
 
   // 当前路由更新时执行
   onBeforeRouteUpdate((to) => {
@@ -124,7 +177,7 @@ const useGoods = () => {
     reqParams.value = { ...reqParams.value, ...target };
   };
 
-  return { goodsData, onFilterSortParamsChanged };
+  return { goodsData, onFilterSortParamsChanged, loading, finished, loadMore };
 };
 </script>
 
