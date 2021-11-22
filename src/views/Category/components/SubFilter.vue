@@ -94,7 +94,7 @@ const useSubCategoryFilter = (emit) => {
   };
   // 初始化筛选条件数据
   getSubCategoryFilterById(route.params.id);
-  // 当前路由更新前执行
+  // 当前路由更新时执行
   onBeforeRouteUpdate((to) => getSubCategoryFilterById(to.params.id));
 
   // 用户选择的筛选条件

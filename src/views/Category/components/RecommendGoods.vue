@@ -36,7 +36,7 @@ export default {
     // 首次进入时获取一级分类数据
     useGetTopCategoryById(route.params.id);
 
-    // 当前路由更新前执行
+    // 当前路由更新时执行
     onBeforeRouteUpdate((to) => {
       // 更新一级分类数据
       useGetTopCategoryById(to.params.id);
