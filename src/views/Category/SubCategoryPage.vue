@@ -15,10 +15,10 @@
         </Transition>
       </XtxBread>
       <!-- 筛选条件 -->
-      <SubFilter @onFilterParamsChanged="onParamsChanged" />
+      <SubFilter @onFilterParamsChanged="onFilterSortParamsChanged" />
       <div class="goods-list">
         <!-- 商品排序 -->
-        <SubSort />
+        <SubSort @onSortParamsChanged="onFilterSortParamsChanged" />
         <!-- 商品列表 -->
         <GoodsList :goods="goodsData.items" v-if="goodsData" />
       </div>
@@ -40,17 +40,13 @@ export default {
   name: "SubCategory",
   components: { GoodsList, SubSort, SubFilter, AppLayout },
   setup() {
+    // 获取面包屑导航数据
     const category = useBread();
 
-    // 获取用户选择的筛选条件
-    const onParamsChanged = (target) => {
-      console.log(target);
-    };
-
     // 获取商品数据
-    const { goodsData } = useGoods();
+    const { goodsData, onFilterSortParamsChanged } = useGoods();
 
-    return { category, onParamsChanged, goodsData };
+    return { category, goodsData, onFilterSortParamsChanged };
   },
 };
 
@@ -123,7 +119,12 @@ const useGoods = () => {
     };
   });
 
-  return { goodsData };
+  // 更新请求参数
+  const onFilterSortParamsChanged = (target) => {
+    reqParams.value = { ...reqParams.value, ...target };
+  };
+
+  return { goodsData, onFilterSortParamsChanged };
 };
 </script>
 
