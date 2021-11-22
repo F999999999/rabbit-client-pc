@@ -16,23 +16,29 @@
       </XtxBread>
       <!-- 筛选条件 -->
       <SubFilter @onFilterParamsChanged="onParamsChanged" />
-      <!-- 商品排序 -->
-      <SubSort />
+      <div class="goods-list">
+        <!-- 商品排序 -->
+        <SubSort />
+        <!-- 商品列表 -->
+        <GoodsList :goods="goodsData.items" v-if="goodsData" />
+      </div>
     </div>
   </AppLayout>
 </template>
 
 <script>
 import AppLayout from "@/components/AppLayout";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import SubFilter from "@/views/Category/components/SubFilter";
 import SubSort from "@/views/Category/components/SubSort";
+import GoodsList from "@/views/Category/components/GoodsList";
+import { getGoodsList } from "@/api/category";
 
 export default {
   name: "SubCategory",
-  components: { SubSort, SubFilter, AppLayout },
+  components: { GoodsList, SubSort, SubFilter, AppLayout },
   setup() {
     const category = useBread();
 
@@ -41,7 +47,10 @@ export default {
       console.log(target);
     };
 
-    return { category, onParamsChanged };
+    // 获取商品数据
+    const { goodsData } = useGoods();
+
+    return { category, onParamsChanged, goodsData };
   },
 };
 
@@ -74,6 +83,54 @@ const useBread = () => {
     return { topCategory, subCategory };
   });
 };
+
+// 获取商品数据
+const useGoods = () => {
+  // 获取路由信息
+  const route = useRoute();
+  // 商品数据
+  const goodsData = ref(null);
+  // 请求参数
+  const reqParams = ref({
+    categoryId: route.params.id,
+  });
+  // 获取商品数据的方法
+  const getGoods = () => {
+    // 获取商品数据
+    getGoodsList(reqParams.value).then((res) => {
+      console.log(res);
+      goodsData.value = res.result;
+    });
+  };
+  // 监听请求参数的变化
+  watch(
+    () => reqParams.value,
+    () => {
+      // 当数据变化的时候重新发起请求获取新的数据
+      getGoods();
+    },
+    {
+      // 初始化时执行
+      immediate: true,
+    }
+  );
+
+  // 当前路由更新时执行
+  onBeforeRouteUpdate((to) => {
+    // 更新请求参数
+    reqParams.value = {
+      categoryId: to.params.id,
+    };
+  });
+
+  return { goodsData };
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.goods-list {
+  background: #fff;
+  padding: 0 25px;
+  margin-top: 25px;
+}
+</style>

@@ -17,3 +17,12 @@ export const getTopCategoryByIdApi = (id) => {
 export const getSubCategoryFilterByIdApi = (id) => {
   return requestWithOutToken("/category/sub/filter", "get", { id });
 };
+
+/**
+ * 获取商品列表
+ * @param params 分类ID、筛选条件、排序条件、分页信息
+ * @returns {Promise}
+ */
+export const getGoodsList = (params) => {
+  return requestWithOutToken("/category/goods", "post", params);
+};
