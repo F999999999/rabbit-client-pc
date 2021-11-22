@@ -123,7 +123,7 @@ const useSubCategoryFilter = (emit) => {
       }
     });
     // 把用户选择的筛选条件传递给父组件
-    emit("onFilterChanged", selectedFilters);
+    emit("onFilterParamsChanged", selectedFilters);
   };
 
   return { filters, updateSelectedFilters, filtersLoading };
