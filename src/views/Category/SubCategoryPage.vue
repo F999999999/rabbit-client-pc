@@ -15,10 +15,10 @@
         </Transition>
       </XtxBread>
       <!-- 筛选条件 -->
-      <SubFilter @onFilterParamsChanged="onFilterSortParamsChanged" />
+      <SubFilter @onFilterParamsChanged="onFilterParamsChanged" />
       <div class="goods-list">
         <!-- 商品排序 -->
-        <SubSort @onSortParamsChanged="onFilterSortParamsChanged" />
+        <SubSort @onSortParamsChanged="onFilterParamsChanged" />
         <!-- 商品列表 -->
         <GoodsList :goods="goodsData.items" v-if="goodsData" />
         <!-- 无限加载组件 -->
@@ -50,18 +50,13 @@ export default {
     const category = useBread();
 
     // 获取商品数据
-    const {
-      goodsData,
-      onFilterSortParamsChanged,
-      loading,
-      finished,
-      loadMore,
-    } = useGoods();
+    const { goodsData, onFilterParamsChanged, loading, finished, loadMore } =
+      useGoods();
 
     return {
       category,
       goodsData,
-      onFilterSortParamsChanged,
+      onFilterParamsChanged,
       loading,
       finished,
       loadMore,
@@ -109,7 +104,7 @@ const useGoods = () => {
   const reqParams = ref({
     categoryId: route.params.id,
     // 当前页
-    page: 1,
+    page: 0,
     // 每次请求获取的数据数量
     pageSize: 10,
   });
@@ -121,6 +116,8 @@ const useGoods = () => {
   const getGoods = () => {
     // 数据加载中
     loading.value = true;
+    // 重置 finished 为 false 默认不显示
+    finished.value = false;
     // 获取商品数据
     getGoodsList(reqParams.value).then((res) => {
       // 数据加载完成
@@ -129,6 +126,9 @@ const useGoods = () => {
       if (reqParams.value.page === 1) {
         // 直接赋值
         goodsData.value = res.result;
+        // 如果获取到的数据不为空 设置 finished 为 false 否则 为 true
+        // 解决第一页没有数据不显示数据加载完成的组件
+        finished.value = res.result?.items?.length <= 0;
       } else {
         // 否则追加到数据后面
         goodsData.value = {
@@ -149,10 +149,6 @@ const useGoods = () => {
     () => {
       // 当数据变化的时候重新发起请求获取新的数据
       getGoods();
-    },
-    {
-      // 初始化时执行
-      immediate: true,
     }
   );
   // 加载更多数据
@@ -169,15 +165,22 @@ const useGoods = () => {
     // 更新请求参数
     reqParams.value = {
       categoryId: to.params.id,
+      // 切换二级分类时重置页码
+      page: 1,
     };
   });
 
   // 更新请求参数
-  const onFilterSortParamsChanged = (target) => {
-    reqParams.value = { ...reqParams.value, ...target };
+  const onFilterParamsChanged = (target) => {
+    reqParams.value = {
+      ...reqParams.value,
+      ...target,
+      // 步骤页码
+      page: 1,
+    };
   };
 
-  return { goodsData, onFilterSortParamsChanged, loading, finished, loadMore };
+  return { goodsData, onFilterParamsChanged, loading, finished, loadMore };
 };
 </script>
 
