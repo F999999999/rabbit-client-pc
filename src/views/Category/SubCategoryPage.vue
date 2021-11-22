@@ -16,6 +16,8 @@
       </XtxBread>
       <!-- 筛选条件 -->
       <SubFilter @onFilterParamsChanged="onParamsChanged" />
+      <!-- 商品排序 -->
+      <SubSort />
     </div>
   </AppLayout>
 </template>
@@ -26,10 +28,11 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import SubFilter from "@/views/Category/components/SubFilter";
+import SubSort from "@/views/Category/components/SubSort";
 
 export default {
   name: "SubCategory",
-  components: { SubFilter, AppLayout },
+  components: { SubSort, SubFilter, AppLayout },
   setup() {
     const category = useBread();
 
