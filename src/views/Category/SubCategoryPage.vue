@@ -124,11 +124,8 @@ const useGoods = () => {
       loading.value = false;
       // 判断是否是第一页
       if (reqParams.value.page === 1) {
-        // 直接赋值
+        // 如果是第一页直接赋值
         goodsData.value = res.result;
-        // 如果获取到的数据不为空 设置 finished 为 false 否则 为 true
-        // 解决第一页没有数据不显示数据加载完成的组件
-        finished.value = res.result?.items?.length <= 0;
       } else {
         // 否则追加到数据后面
         goodsData.value = {
@@ -137,7 +134,11 @@ const useGoods = () => {
         };
       }
       // 判断是否是最后一页
-      if (reqParams.value.page === res.result.pages) {
+      // 如果获取到的数据为空 设置 finished 为 true 解决第一页没有数据不显示数据加载完成的组件
+      if (
+        reqParams.value.page === res.result.pages ||
+        res.result?.items?.length <= 0
+      ) {
         // 已加载完所有数据
         finished.value = true;
       }
