@@ -43,15 +43,20 @@ jobs:
         uses: actions/cache@v2
         id: yarn-cache
         with:
+          # 需要缓存的文件、目录和通配符模式列表
           path: |
             **/node_modules
+          # 用于恢复和保存缓存的显式密钥
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          # 如果键没有发生缓存命中，则用于恢复缓存的键的显式密钥
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      # 如果缓存没有命中，安装依赖
+      # 安装依赖
       - name: Install dependencies 🔧
+        # 判断缓存是否命中
         if: steps.yarn-cache.outputs.cache-hit != 'true'
+        # 如果没有命中，则安装依赖
         run: yarn --frozen-lockfile
 
       # 运行构建脚本
