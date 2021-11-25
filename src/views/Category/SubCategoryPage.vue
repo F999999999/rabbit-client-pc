@@ -40,7 +40,7 @@ import { computed, ref, watch } from "vue";
 import SubFilter from "@/views/Category/components/SubFilter";
 import SubSort from "@/views/Category/components/SubSort";
 import GoodsList from "@/views/Category/components/GoodsList";
-import { getGoodsList } from "@/api/category";
+import { getGoodsListApi } from "@/api/category";
 
 export default {
   name: "SubCategory",
@@ -119,7 +119,7 @@ const useGoods = () => {
     // 重置 finished 为 false 默认不显示
     finished.value = false;
     // 获取商品数据
-    getGoodsList(reqParams.value).then((res) => {
+    getGoodsListApi(reqParams.value).then((res) => {
       // 数据加载完成
       loading.value = false;
       // 判断是否是第一页
