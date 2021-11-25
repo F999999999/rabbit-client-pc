@@ -1,9 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const HomePage = () => import("@/views/Home");
-import Login from "@/views/Login";
-import TopCategoryPage from "@/views/Category/TopCategoryPage";
-import SubCategoryPage from "@/views/Category/SubCategoryPage";
+const Login = () => import("@/views/Login");
+const TopCategoryPage = () => import("@/views/Category/TopCategoryPage");
+const SubCategoryPage = () => import("@/views/Category/SubCategoryPage");
+const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
 
 const routes = [
   // 首页
@@ -21,13 +22,20 @@ const routes = [
   // 分类
   {
     path: "/category/:id",
+    name: "Category",
     component: TopCategoryPage,
   },
   // 二级分类
   {
     path: "/category/sub/:id",
-    name: "",
+    name: "SubCategory",
     component: SubCategoryPage,
+  },
+  // 商品详情
+  {
+    path: "/goods/:id",
+    name: "Goods",
+    component: GoodsDetailPage,
   },
 ];
 
