@@ -1,13 +1,19 @@
 <template>
   <AppLayout>
-    <div class="xtx-goods-page">
+    <div class="xtx-goods-page" v-if="goodsDetailData">
       <div class="container">
         <!-- 面包屑 -->
         <XtxBread>
           <XtxBreadItem path="/">首页</XtxBreadItem>
-          <XtxBreadItem path="/">手机</XtxBreadItem>
-          <XtxBreadItem path="/">华为</XtxBreadItem>
-          <XtxBreadItem path="/">p30</XtxBreadItem>
+          <XtxBreadItem :path="`/category/${goodsDetailData.categories[1].id}`">
+            {{ goodsDetailData.categories[1].name }}
+          </XtxBreadItem>
+          <XtxBreadItem
+            :path="`/category/sub/${goodsDetailData.categories[0].id}`"
+          >
+            {{ goodsDetailData.categories[0].name }}
+          </XtxBreadItem>
+          <XtxBreadItem>{{ goodsDetailData.name }}</XtxBreadItem>
         </XtxBread>
         <!-- 商品信息 -->
         <div class="goods-info">
@@ -37,9 +43,41 @@
 <script>
 import GoodsRelevant from "@/views/Goods/components/GoodsRelevant";
 import AppLayout from "@/components/AppLayout";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { ref } from "vue";
+import { getGoodsDetailByIdApi } from "@/api/goods";
+
 export default {
   name: "GoodsDetailPage",
   components: { GoodsRelevant, AppLayout },
+  setup() {
+    const { goodsDetailData } = goods();
+
+    return { goodsDetailData };
+  },
+};
+
+const goods = () => {
+  // 获取路由信息
+  const route = useRoute();
+  // 商品详情信息
+  const goodsDetailData = ref(null);
+  // 获取商品详情信息
+  const getGoodsDetail = (id) => {
+    // 发送请求获取商品详情数据
+    getGoodsDetailByIdApi(id).then((res) => {
+      goodsDetailData.value = res.result;
+    });
+  };
+  // 初始获取数据
+  getGoodsDetail(route.params.id);
+  // 当前路由更新时执行
+  onBeforeRouteUpdate((to) => {
+    // 更新商品详情数据
+    getGoodsDetail(to.params.id);
+  });
+
+  return { goodsDetailData, getGoodsDetail };
 };
 </script>
 
