@@ -18,7 +18,10 @@
         <!-- 商品信息 -->
         <div class="goods-info">
           <!-- 左侧 -->
-          <div class="media"></div>
+          <div class="media">
+            <!-- 图片预览组件 -->
+            <GoodsImages :images="goodsDetailData.mainPictures" />
+          </div>
           <!-- 右侧 -->
           <div class="spec"></div>
         </div>
@@ -46,10 +49,11 @@ import AppLayout from "@/components/AppLayout";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
 import { getGoodsDetailByIdApi } from "@/api/goods";
+import GoodsImages from "@/views/Goods/components/GoodsImages";
 
 export default {
   name: "GoodsDetailPage",
-  components: { GoodsRelevant, AppLayout },
+  components: { GoodsImages, GoodsRelevant, AppLayout },
   setup() {
     const { goodsDetailData } = goods();
 
