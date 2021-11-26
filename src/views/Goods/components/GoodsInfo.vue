@@ -12,7 +12,9 @@
     </dl>
     <dl>
       <dt>配送</dt>
-      <dd>至</dd>
+      <dd>
+        至 <XtxCity :location="location" @onCityChanged="onCityChanged" />
+      </dd>
     </dl>
     <dl>
       <dt>服务</dt>
@@ -27,6 +29,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "GoodsInfo",
   props: {
@@ -34,6 +38,17 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  setup() {
+    // 用户选择的城市信息的名称集合
+    const location = ref("");
+    // 当用户选择完城市信息后调用
+    const onCityChanged = (data) => {
+      // 拼接用户选择的城市信息
+      location.value = data.location;
+    };
+
+    return { onCityChanged, location };
   },
 };
 </script>

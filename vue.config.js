@@ -13,4 +13,12 @@ module.exports = {
       ],
     },
   },
+  // 将小于 10kb 的图片打包为 base64 编码格式
+  chainWebpack: (config) => {
+    config.module
+      .rule("images")
+      .use("url-loader")
+      .loader("url-loader")
+      .tap((options) => Object.assign(options, { limit: 10240 }));
+  },
 };
