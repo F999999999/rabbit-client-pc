@@ -21,9 +21,14 @@
           <div class="media">
             <!-- 图片预览组件 -->
             <GoodsImages :images="goodsDetailData.mainPictures" />
+            <!-- 商品销售信息 -->
+            <GoodsSales />
           </div>
           <!-- 右侧 -->
-          <div class="spec"></div>
+          <div class="spec">
+            <!-- 商品基本信息 -->
+            <GoodsInfo :goods="goodsDetailData" />
+          </div>
         </div>
         <!-- 商品推荐 -->
         <GoodsRelevant></GoodsRelevant>
@@ -50,10 +55,12 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
 import { getGoodsDetailByIdApi } from "@/api/goods";
 import GoodsImages from "@/views/Goods/components/GoodsImages";
+import GoodsSales from "@/views/Goods/components/GoodsSales";
+import GoodsInfo from "@/views/Goods/components/GoodsInfo";
 
 export default {
   name: "GoodsDetailPage",
-  components: { GoodsImages, GoodsRelevant, AppLayout },
+  components: { GoodsInfo, GoodsSales, GoodsImages, GoodsRelevant, AppLayout },
   setup() {
     const { goodsDetailData } = goods();
 
