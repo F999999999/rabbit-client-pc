@@ -28,6 +28,8 @@
           <div class="spec">
             <!-- 商品基本信息 -->
             <GoodsInfo :goods="goodsDetailData" />
+            <!-- 商品规格 -->
+            <GoodsSku :specs="goodsDetailData.specs" />
           </div>
         </div>
         <!-- 商品推荐 -->
@@ -57,10 +59,18 @@ import { getGoodsDetailByIdApi } from "@/api/goods";
 import GoodsImages from "@/views/Goods/components/GoodsImages";
 import GoodsSales from "@/views/Goods/components/GoodsSales";
 import GoodsInfo from "@/views/Goods/components/GoodsInfo";
+import GoodsSku from "@/views/Goods/components/GoodsSku";
 
 export default {
   name: "GoodsDetailPage",
-  components: { GoodsInfo, GoodsSales, GoodsImages, GoodsRelevant, AppLayout },
+  components: {
+    GoodsSku,
+    GoodsInfo,
+    GoodsSales,
+    GoodsImages,
+    GoodsRelevant,
+    AppLayout,
+  },
   setup() {
     const { goodsDetailData } = goods();
 
