@@ -29,7 +29,6 @@ export default {
     const useGetTopCategoryById = (id) => {
       // 获取一级分类并存储
       getTopCategoryByIdApi(id).then((res) => {
-        console.log(res);
         topCategory.value = res.result;
       });
     };

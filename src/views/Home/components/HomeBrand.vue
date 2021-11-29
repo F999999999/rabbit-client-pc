@@ -70,7 +70,6 @@ const useToggle = (length = 10) => {
   const toggle = (step) => {
     // 下一个索引
     const nextIndex = currentIndex.value + step;
-    console.log(nextIndex, length / 5);
     // 如果索引超出范围则不进行操作
     if (nextIndex < 0 || nextIndex >= length / 5) return;
     // 修改下一个索引为当前索引

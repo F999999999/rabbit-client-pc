@@ -64,7 +64,6 @@ export default {
       show.value = !isOutside.value;
       // 判断鼠标是否在当前图片上
       if (!isOutside.value) {
-        console.log(isOutside.value, elementX.value, elementY.value);
         // 更新镜片元素位置
         layerPosition.value = {
           x: elementX.value - 100,
