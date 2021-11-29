@@ -39,6 +39,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    skuId: {
+      type: String,
+      default: "",
+    },
   },
   setup(props) {
     // 获取用户选中的规格项目
@@ -99,13 +103,34 @@ export default {
     // 初始化规格选项禁用状态
     updateSpecDisabled(props.specs, pathMap);
 
+    // 设置默认选中的规格选项
+    const setDefaultSelected = (skuId, skus, specs) => {
+      // 判断是否需要设置默认选中的规格选项
+      if (!skuId) return;
+      // 根据 skuId 查找规格集合中的规格对象并遍历 specs 数组中的所有规格返回所有规格选项的名称组成的数组
+      const target = skus
+        .find((sku) => sku.id === skuId)
+        .specs.map((spec) => spec.valueName);
+      // 遍历所有规格选项
+      specs.forEach((spec) => {
+        spec.values.forEach((item) => {
+          // 判断当前规格选项名称是否在 target 数组中
+          if (target.includes(item.name)) {
+            // 设置选中状态为 true
+            item.selected = true;
+          }
+        });
+      });
+    };
+    // 初始化默认选中的规格选项
+    setDefaultSelected(props.skuId, props.skus, props.specs);
+
     return { updateSpecSelected };
   },
 };
 
 // 创建规格查询对象
 const createPathMap = (skus) => {
-  console.log(skus, "skus");
   // 规格查询对象
   const pathMap = {};
   // 遍历所有可组合的规格组合
