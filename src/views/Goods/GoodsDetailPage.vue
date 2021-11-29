@@ -29,7 +29,10 @@
             <!-- 商品基本信息 -->
             <GoodsInfo :goods="goodsDetailData" />
             <!-- 商品规格 -->
-            <GoodsSku :specs="goodsDetailData.specs" />
+            <GoodsSku
+              :specs="goodsDetailData.specs"
+              :skus="goodsDetailData.skus"
+            />
           </div>
         </div>
         <!-- 商品推荐 -->
