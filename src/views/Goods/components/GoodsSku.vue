@@ -137,7 +137,8 @@ const createPathMap = (skus) => {
   border: 1px solid #e4e4e4;
   margin-right: 10px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   &.selected {
     border-color: @xtxColor;
   }
@@ -165,8 +166,6 @@ const createPathMap = (skus) => {
         width: 50px;
         height: 50px;
         .sku-state-mixin ();
-        margin-top: 5px;
-        margin-bottom: 5px;
       }
       > span {
         display: inline-block;
@@ -174,8 +173,6 @@ const createPathMap = (skus) => {
         line-height: 28px;
         padding: 0 20px;
         .sku-state-mixin ();
-        margin-top: 5px;
-        margin-bottom: 5px;
       }
     }
   }
