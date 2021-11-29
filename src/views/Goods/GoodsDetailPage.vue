@@ -32,6 +32,7 @@
             <GoodsSku
               :specs="goodsDetailData.specs"
               :skus="goodsDetailData.skus"
+              @onSpecChanged="onSpecChanged"
             />
           </div>
         </div>
@@ -77,7 +78,15 @@ export default {
   setup() {
     const { goodsDetailData } = goods();
 
-    return { goodsDetailData };
+    // 监听规格组件传递过来的数据
+    const onSpecChanged = (sku) => {
+      // 更新商品现价
+      goodsDetailData.value.price = sku.price;
+      // 更新商品原价
+      goodsDetailData.value.oldPrice = sku.oldPrice;
+    };
+
+    return { goodsDetailData, onSpecChanged };
   },
 };
 

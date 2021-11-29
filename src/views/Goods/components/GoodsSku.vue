@@ -44,7 +44,7 @@ export default {
       default: "",
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     // 获取用户选中的规格项目
     const getUserSelected = (specs) => {
       // 用户选中的规格列表
@@ -98,6 +98,8 @@ export default {
       }
       // 更新规格选项的可选状态
       updateSpecDisabled(props.specs, pathMap);
+      // 传递规格信息数据到父组件
+      sendDataToParent(props.specs, props.skus, emit, pathMap);
     };
 
     // 初始化规格选项禁用状态
@@ -125,6 +127,31 @@ export default {
     // 初始化默认选中的规格选项
     setDefaultSelected(props.skuId, props.skus, props.specs);
 
+    // 传递规格信息数据到父组件
+    const sendDataToParent = (specs, skus, emit, pathMap) => {
+      // 获取用户选择的规格名称数组
+      const selected = getUserSelected(specs);
+      // 判断当前规格组合是否是完整规格
+      if (selected.filter((item) => item).length === specs.length) {
+        // 将规格名称使用"_"进行拼接
+        const key = selected.join("_");
+        // 获取规格组合的 skuId
+        const skuId = pathMap[key];
+        // 使用 skuId 在规格集合中查找具体的规格对象信息
+        const target = skus.find((sku) => sku.id === skuId);
+        // 触发自定义事件将规格信息传递给父组件
+        emit("onSpecChanged", {
+          skuId,
+          price: target.price,
+          oldPrice: target.oldPrice,
+          inventory: target.inventory,
+          specsText: target.specs
+            .map((spec) => `${spec.name}：${spec.valueName}`)
+            .join(" "),
+        });
+      }
+    };
+
     return { updateSpecSelected };
   },
 };
@@ -147,7 +174,7 @@ const createPathMap = (skus) => {
         const key = set.join("_");
         // 判断规格查询对象中是否已经存在当前规格组合
         if (key && !pathMap[key]) {
-          // 判断当前规格组合的名称是否是完整规格
+          // 判断当前规格组合是否是完整规格
           // 将当前规格组合的名称作为规格查询对象的键 如果当前规格是完整规格 值为商品的 skuId 否则为 null
           pathMap[key] = set.length === sku.specs.length ? sku.id : null;
         }
