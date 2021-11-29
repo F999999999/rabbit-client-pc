@@ -5,9 +5,9 @@
       <dd>
         <template v-for="item in spec.values" :key="item.name">
           <img
-            :class="{ selected: item.selected, disabled: item.disabled }"
             :src="item.picture"
             :alt="item.name"
+            :class="{ selected: item.selected, disabled: item.disabled }"
             v-if="item.picture"
             @click="updateSpecSelected(spec, item)"
           />
@@ -41,27 +41,6 @@ export default {
     },
   },
   setup(props) {
-    // 获取规格查询对象
-    const pathMap = createPathMap(props.skus);
-
-    // 更新规格的选中状态
-    const updateSpecSelected = (spec, item) => {
-      // 如果当前规格是禁止选中状态 则不做任何操作
-      if (item.disabled) return;
-      // 判断当前的选中状态
-      if (item.selected) {
-        // 如果选中让其取消选中
-        item.selected = false;
-      } else {
-        // 如果没选中先将该规格中的所有规格取消选中
-        spec.values.forEach((value) => (value.selected = false));
-        // 让当前的规格选中
-        item.selected = true;
-      }
-      // 更新规格选项的可选状态
-      updateSpecDisabled(props.specs, pathMap);
-    };
-
     // 获取用户选中的规格项目
     const getUserSelected = (specs) => {
       // 用户选中的规格列表
@@ -76,6 +55,9 @@ export default {
 
       return selectedSpecs;
     };
+
+    // 获取规格查询对象
+    const pathMap = createPathMap(props.skus);
 
     // 更新规格选项的可选状态
     const updateSpecDisabled = (specs, pathMap) => {
@@ -95,7 +77,26 @@ export default {
         });
       });
     };
-    // 初始化规格按钮禁用状态
+
+    // 更新规格的选中状态
+    const updateSpecSelected = (spec, item) => {
+      // 如果当前规格是禁止选中状态 则不做任何操作
+      if (item.disabled) return;
+      // 判断当前的选中状态
+      if (item.selected) {
+        // 如果选中让其取消选中
+        item.selected = false;
+      } else {
+        // 如果没选中先将该规格中的所有规格取消选中
+        spec.values.forEach((value) => (value.selected = false));
+        // 让当前的规格选中
+        item.selected = true;
+      }
+      // 更新规格选项的可选状态
+      updateSpecDisabled(props.specs, pathMap);
+    };
+
+    // 初始化规格选项禁用状态
     updateSpecDisabled(props.specs, pathMap);
 
     return { updateSpecSelected };
