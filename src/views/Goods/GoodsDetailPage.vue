@@ -34,6 +34,12 @@
               :skus="goodsDetailData.skus"
               @onSpecChanged="onSpecChanged"
             />
+            <!-- 数量选择组件 -->
+            <XtxNumberBox
+              v-model="goodsCount"
+              :max="goodsDetailData.inventory"
+              label="数量"
+            />
           </div>
         </div>
         <!-- 商品推荐 -->
@@ -86,7 +92,10 @@ export default {
       goodsDetailData.value.oldPrice = sku.oldPrice;
     };
 
-    return { goodsDetailData, onSpecChanged };
+    // 购买数量
+    const goodsCount = ref(1);
+
+    return { goodsDetailData, onSpecChanged, goodsCount };
   },
 };
 
@@ -119,32 +128,39 @@ const goods = () => {
   min-height: 600px;
   background: #fff;
   display: flex;
+
   .media {
     width: 580px;
     height: 600px;
     padding: 30px 50px;
   }
+
   .spec {
     flex: 1;
     padding: 30px 30px 30px 0;
   }
 }
+
 .goods-footer {
   display: flex;
   margin-top: 20px;
+
   .goods-article {
     width: 940px;
     margin-right: 20px;
   }
+
   .goods-aside {
     width: 280px;
     min-height: 1000px;
   }
 }
+
 .goods-tabs {
   min-height: 600px;
   background: #fff;
 }
+
 .goods-warn {
   min-height: 600px;
   background: #fff;
