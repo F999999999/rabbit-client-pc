@@ -40,6 +40,10 @@
               :max="goodsDetailData.inventory"
               label="数量"
             />
+            <!-- 加入购物车按钮 -->
+            <XtxButton type="primary" :style="{ 'margin-top': '20px' }">
+              加入购物车
+            </XtxButton>
           </div>
         </div>
         <!-- 商品推荐 -->
