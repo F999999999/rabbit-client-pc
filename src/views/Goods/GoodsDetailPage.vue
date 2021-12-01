@@ -51,8 +51,8 @@
         <!-- 商品详情 -->
         <div class="goods-footer">
           <div class="goods-article">
-            <!-- 商品+评价 -->
-            <div class="goods-tabs"></div>
+            <!-- 商品详情&评价 -->
+            <GoodsTab />
             <!-- 注意事项 -->
             <div class="goods-warn"></div>
           </div>
@@ -74,10 +74,12 @@ import GoodsImages from "@/views/Goods/components/GoodsImages";
 import GoodsSales from "@/views/Goods/components/GoodsSales";
 import GoodsInfo from "@/views/Goods/components/GoodsInfo";
 import GoodsSku from "@/views/Goods/components/GoodsSku";
+import GoodsTab from "@/views/Goods/components/GoodsTab";
 
 export default {
   name: "GoodsDetailPage",
   components: {
+    GoodsTab,
     GoodsSku,
     GoodsInfo,
     GoodsSales,
