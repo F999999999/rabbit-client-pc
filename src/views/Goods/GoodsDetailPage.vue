@@ -54,7 +54,7 @@
             <!-- 商品详情&评价 -->
             <GoodsTab />
             <!-- 注意事项 -->
-            <div class="goods-warn"></div>
+            <GoodsWarn />
           </div>
           <!-- 24热榜 -->
           <div class="goods-aside">
@@ -72,7 +72,7 @@
 import GoodsRelevant from "@/views/Goods/components/GoodsRelevant";
 import AppLayout from "@/components/AppLayout";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
-import { ref } from "vue";
+import { provide, ref } from "vue";
 import { getGoodsDetailByIdApi } from "@/api/goods";
 import GoodsImages from "@/views/Goods/components/GoodsImages";
 import GoodsSales from "@/views/Goods/components/GoodsSales";
@@ -80,10 +80,12 @@ import GoodsInfo from "@/views/Goods/components/GoodsInfo";
 import GoodsSku from "@/views/Goods/components/GoodsSku";
 import GoodsTab from "@/views/Goods/components/GoodsTab";
 import GoodsHot from "@/views/Goods/components/GoodsHot";
+import GoodsWarn from "@/views/Goods/components/GoodsWarn";
 
 export default {
   name: "GoodsDetailPage",
   components: {
+    GoodsWarn,
     GoodsHot,
     GoodsTab,
     GoodsSku,
@@ -106,6 +108,9 @@ export default {
 
     // 购买数量
     const goodsCount = ref(1);
+
+    // 使用 provide 共享数据给子组件
+    provide("goodsDetailData", goodsDetailData);
 
     return { goodsDetailData, onSpecChanged, goodsCount };
   },

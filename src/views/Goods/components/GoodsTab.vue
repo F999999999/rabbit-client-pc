@@ -9,7 +9,7 @@
         商品详情
       </a>
       <a href="javascript:" @click="activeComponentName = 'GoodsComment'">
-        商品评价<span>(500+)</span>
+        商品评价<span>({{ goodsDetailData.commentCount }}+)</span>
       </a>
     </nav>
     <!-- 根据组件名称动态渲染组件 -->
@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import GoodsDetail from "@/views/Goods/components/GoodsDetail";
 import GoodsComment from "@/views/Goods/components/GoodsComment";
 
@@ -25,10 +25,13 @@ export default {
   name: "GoodsTab",
   components: { GoodsComment, GoodsDetail },
   setup() {
+    // 获取 provide 传递过来的值
+    const goodsDetailData = inject("goodsDetailData");
+
     // 当前 Tab 页显示的页面名称
     const activeComponentName = ref("GoodsDetail");
 
-    return { activeComponentName };
+    return { activeComponentName, goodsDetailData };
   },
 };
 </script>
