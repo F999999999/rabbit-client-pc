@@ -57,7 +57,11 @@
             <div class="goods-warn"></div>
           </div>
           <!-- 24热榜 -->
-          <div class="goods-aside"></div>
+          <div class="goods-aside">
+            <GoodsHot :type="1" />
+            <GoodsHot :type="2" />
+            <GoodsHot :type="3" />
+          </div>
         </div>
       </div>
     </div>
@@ -75,10 +79,12 @@ import GoodsSales from "@/views/Goods/components/GoodsSales";
 import GoodsInfo from "@/views/Goods/components/GoodsInfo";
 import GoodsSku from "@/views/Goods/components/GoodsSku";
 import GoodsTab from "@/views/Goods/components/GoodsTab";
+import GoodsHot from "@/views/Goods/components/GoodsHot";
 
 export default {
   name: "GoodsDetailPage",
   components: {
+    GoodsHot,
     GoodsTab,
     GoodsSku,
     GoodsInfo,
