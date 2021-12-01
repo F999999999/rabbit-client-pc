@@ -47,7 +47,7 @@
           </div>
         </div>
         <!-- 商品推荐 -->
-        <GoodsRelevant></GoodsRelevant>
+        <GoodsRelevant :goodsId="goodsDetailData.id" />
         <!-- 商品详情 -->
         <div class="goods-footer">
           <div class="goods-article">

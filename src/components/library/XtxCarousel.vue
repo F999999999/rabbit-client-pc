@@ -12,15 +12,32 @@
         v-for="(item, index) in carousels"
         :key="item.id"
       >
-        <RouterLink :to="item.hrefUrl">
+        <!-- 如果 item 是数组则表示一张轮播图中有多个数据，需要对其进行遍历渲染多个数据 -->
+        <div class="slider" v-if="Array.isArray(item)">
+          <router-link
+            v-for="goods in item"
+            :key="goods.id"
+            :to="`/goods/${goods.id}`"
+          >
+            <img :src="goods.picture" alt="" />
+            <p class="name ellipsis">{{ goods.name }}</p>
+            <p class="price">&yen;{{ goods.price }}</p>
+          </router-link>
+        </div>
+        <!-- 如果 item 是对象则直接渲染 -->
+        <RouterLink :to="item.hrefUrl" v-else>
           <img :src="item.imgUrl" alt="" />
         </RouterLink>
       </li>
     </ul>
     <!-- 轮播图左按钮 -->
-    <a @click="toggle(-1)" class="carousel-btn prev">&lt;</a>
+    <a @click="toggle(-1)" class="carousel-btn prev">
+      <i class="iconfont icon-angle-left"></i>
+    </a>
     <!-- 轮播图右按钮 -->
-    <a @click="toggle(1)" class="carousel-btn next">&gt;</a>
+    <a @click="toggle(1)" class="carousel-btn next">
+      <i class="iconfont icon-angle-right"></i>
+    </a>
     <!-- 圆点导航 -->
     <div class="carousel-indicator">
       <span
@@ -102,11 +119,13 @@ export default {
   min-width: 300px;
   min-height: 150px;
   position: relative;
+
   .carousel {
     &-body {
       width: 100%;
       height: 100%;
     }
+
     &-item {
       width: 100%;
       height: 100%;
@@ -115,15 +134,18 @@ export default {
       top: 0;
       opacity: 0;
       transition: opacity 0.5s linear;
+
       &.fade {
         opacity: 1;
         z-index: 1;
       }
+
       img {
         width: 100%;
         height: 100%;
       }
     }
+
     &-indicator {
       position: absolute;
       left: 0;
@@ -131,6 +153,7 @@ export default {
       z-index: 2;
       width: 100%;
       text-align: center;
+
       span {
         display: inline-block;
         width: 12px;
@@ -138,14 +161,17 @@ export default {
         background: rgba(0, 0, 0, 0.2);
         border-radius: 50%;
         cursor: pointer;
+
         ~ span {
           margin-left: 12px;
         }
+
         &.active {
           background: #fff;
         }
       }
     }
+
     &-btn {
       width: 44px;
       height: 44px;
@@ -159,17 +185,49 @@ export default {
       line-height: 44px;
       opacity: 0;
       transition: all 0.5s;
+
       &.prev {
         left: 20px;
       }
+
       &.next {
         right: 20px;
       }
     }
   }
+
   &:hover {
     .carousel-btn {
       opacity: 1;
+    }
+  }
+}
+
+.slider {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 40px;
+
+  > a {
+    width: 240px;
+    text-align: center;
+
+    img {
+      padding: 20px;
+      width: 230px !important;
+      height: 230px !important;
+    }
+
+    .name {
+      font-size: 16px;
+      color: #666;
+      padding: 0 40px;
+    }
+
+    .price {
+      font-size: 16px;
+      color: @priceColor;
+      margin-top: 15px;
     }
   }
 }
