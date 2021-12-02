@@ -2,13 +2,17 @@
   <div class="goods-tabs">
     <nav>
       <a
-        class="active"
+        :class="{ active: activeComponentName === 'GoodsDetail' }"
         href="javascript:"
         @click="activeComponentName = 'GoodsDetail'"
       >
         商品详情
       </a>
-      <a href="javascript:" @click="activeComponentName = 'GoodsComment'">
+      <a
+        :class="{ active: activeComponentName === 'GoodsComment' }"
+        href="javascript:"
+        @click="activeComponentName = 'GoodsComment'"
+      >
         商品评价<span>({{ goodsDetailData.commentCount }}+)</span>
       </a>
     </nav>
