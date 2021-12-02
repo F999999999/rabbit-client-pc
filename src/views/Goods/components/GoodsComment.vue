@@ -18,8 +18,16 @@
             href="javascript:"
             v-for="tag in commentInfo.tags"
             :key="tag.title"
-            :class="{ active: tag.title === currentTag }"
-            @click="currentTag = tag.title"
+            :class="{
+              active:
+                tag.title ===
+                (reqParams.tag === ''
+                  ? reqParams.hasPicture
+                    ? '有图'
+                    : '全部评价'
+                  : reqParams.tag),
+            }"
+            @click="updataReqParams({ tag: tag.title })"
           >
             {{ tag.title }}（{{ tag.tagCount }}）
           </a>
@@ -28,9 +36,27 @@
     </div>
     <div class="sort">
       <span>排序：</span>
-      <a href="javascript:" class="active">默认</a>
-      <a href="javascript:">最新</a>
-      <a href="javascript:">最热</a>
+      <a
+        href="javascript:"
+        :class="{ active: reqParams.sortField === '' }"
+        @click="updataReqParams({ sortField: '' })"
+      >
+        默认
+      </a>
+      <a
+        href="javascript:"
+        :class="{ active: reqParams.sortField === 'createTime' }"
+        @click="updataReqParams({ sortField: 'createTime' })"
+      >
+        最新
+      </a>
+      <a
+        href="javascript:"
+        :class="{ active: reqParams.sortField === 'praiseCount' }"
+        @click="updataReqParams({ sortField: 'praiseCount' })"
+      >
+        最热
+      </a>
     </div>
     <div class="list" v-if="commentList">
       <div class="item" v-for="item in commentList.items" :key="item.id">
@@ -69,7 +95,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { getCommentInfoApi, getCommentListApi } from "@/api/goods";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import GoodsCommentImage from "@/views/Goods/components/GoodsCommentImage";
@@ -78,15 +104,22 @@ export default {
   name: "GoodsComment",
   components: { GoodsCommentImage },
   setup() {
-    const { commentInfo, currentTag } = useCommentInfo();
-    const { commentList, formatNickname, formatAttrs } = useCommentList();
-
-    return {
-      commentInfo,
-      currentTag,
+    const { commentInfo } = useCommentInfo();
+    const {
       commentList,
       formatNickname,
       formatAttrs,
+      reqParams,
+      updataReqParams,
+    } = useCommentList();
+
+    return {
+      commentInfo,
+      commentList,
+      formatNickname,
+      formatAttrs,
+      reqParams,
+      updataReqParams,
     };
   },
 };
@@ -97,12 +130,10 @@ const useCommentInfo = () => {
   const route = useRoute();
   // 商品评价统计信息
   const commentInfo = ref(null);
-  // 当前选中的标记
-  const currentTag = ref("全部评价");
   // 获取商品评价统计信息
   const getCommentInfo = (id) => {
     getCommentInfoApi(id).then((res) => {
-      // 添加 全部评价 和 有图 标记
+      // 添加 全部评价 和 有图 标签
       res.result.tags.unshift(
         {
           title: "全部评价",
@@ -125,7 +156,7 @@ const useCommentInfo = () => {
     getCommentInfo(to.params.id);
   });
 
-  return { commentInfo, currentTag };
+  return { commentInfo };
 };
 
 // 获取评价列表数据
@@ -135,8 +166,8 @@ const useCommentList = () => {
   // 商品评论列表
   const commentList = ref(null);
   // 获取商品评论列表
-  const getCommentList = (id) => {
-    getCommentListApi(id).then((res) => {
+  const getCommentList = (id, params) => {
+    getCommentListApi(id, params).then((res) => {
       // 存储商品评论列表
       commentList.value = res.result;
     });
@@ -158,7 +189,49 @@ const useCommentList = () => {
     return specs.map((spec) => `${spec.name}：${spec.nameValue}`).join(" ");
   };
 
-  return { commentList, formatNickname, formatAttrs };
+  // 请求参数
+  const reqParams = ref({
+    page: 1,
+    hasPicture: null,
+    tag: "",
+    sortField: "",
+  });
+
+  // 更新请求参数
+  const updataReqParams = (params) => {
+    // 判断用户是否选择了 评价标签
+    if (params.tag) {
+      // 更新评价标签
+      reqParams.value = {
+        ...reqParams.value,
+        // 如果用户选择的是 有图 设置 hasPicture 为 true 否则为 false
+        hasPicture: params.tag === "有图",
+        // 如果用户选择的是 全部评价 或者 有图 设置 tag 为 空 否则为用户传的 tag
+        tag:
+          params.tag === "全部评价" || params.tag === "有图" ? "" : params.tag,
+      };
+    } else {
+      // 更新排序选项
+      reqParams.value = { ...reqParams.value, ...params };
+    }
+  };
+
+  // 监听请求参数的变化
+  watch(
+    () => reqParams.value,
+    () => {
+      // 重新发送请求获取新的评论列表
+      getCommentList(route.params.id, reqParams.value);
+    }
+  );
+
+  return {
+    commentList,
+    formatNickname,
+    formatAttrs,
+    reqParams,
+    updataReqParams,
+  };
 };
 </script>
 <style scoped lang="less">
