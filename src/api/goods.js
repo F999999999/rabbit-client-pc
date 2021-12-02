@@ -29,3 +29,29 @@ export const getRelevantGoodsApi = (id, limit = 16) => {
 export const getHotGoodsApi = (id, type = 1, limit = 3) => {
   return requestWithOutToken("/goods/hot", "get", { id, type, limit });
 };
+
+/**
+ * 获取商品评价统计数据
+ * @param id 商品ID
+ * @returns {Promise}
+ */
+export const getCommentInfoApi = (id) => {
+  return requestWithOutToken(
+    `https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`,
+    "get"
+  );
+};
+
+/**
+ * 获取评论列表数据
+ * @param id 商品ID
+ * @param params 查询参数
+ * @returns {Promise}
+ */
+export const getCommentListApi = (id, params) => {
+  return requestWithOutToken(
+    `https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`,
+    "get",
+    params
+  );
+};
