@@ -28,7 +28,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
         with:
-          # 是否在git config 中持久化token（默认值：true）
+          # 是否在git config 中持久化 token（默认值：true）
           persist-credentials: false
 
       # 设置 node 环境变量
@@ -39,7 +39,7 @@ jobs:
           node-version: '14'
 
       # 获取 yarn 的缓存目录路径
-      - name: Get yarn cache directory path
+      - name: Get yarn cache directory path 🔗
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
