@@ -210,6 +210,8 @@ const useCommentList = () => {
 
   // 更新请求参数
   const updataReqParams = (params) => {
+    // 重置页码
+    reqParams.value.page = 1;
     // 判断用户是否选择了 评价标签
     if (params.tag) {
       // 更新评价标签
@@ -231,11 +233,10 @@ const useCommentList = () => {
   watch(
     () => reqParams.value,
     () => {
-      // 重置页码
-      reqParams.value.page = 1;
       // 重新发送请求获取新的评论列表
       getCommentList(route.params.id, reqParams.value);
-    }
+    },
+    { deep: true }
   );
 
   return {
