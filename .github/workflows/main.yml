@@ -54,7 +54,9 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           # 如果键没有发生缓存命中，则用于恢复缓存的键的显式密钥
           restore-keys: |
+            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
             ${{ runner.os }}-yarn-
+            ${{ runner.os }}-
 
       # 安装依赖
       - name: Install dependencies 🔧
@@ -65,7 +67,7 @@ jobs:
 
       # 运行构建脚本
       - name: Build ⏳
-        run: yarn run build
+        run: yarn build
 
       # 部署到服务器
       - name: Deploy 🚀
