@@ -54,13 +54,13 @@ jobs:
       # 安装依赖
       - name: Install dependencies 🔧
         # 判断缓存是否命中
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         # 如果没有命中，则安装依赖
-        run: yarn --frozen-lockfile
+        run: npm install --frozen-lockfile
 
       # 运行构建脚本
       - name: Build ⏳
-        run: yarn build
+        run: npm run build
 
       # 部署到服务器
       - name: Deploy 🚀
