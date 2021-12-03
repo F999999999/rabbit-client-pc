@@ -38,6 +38,11 @@ jobs:
           # 需要使用的 node 版本
           node-version: '14'
 
+      # 获取 yarn 的缓存目录路径
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
       # 缓存 node_modules
       - name: Cache dependencies 📦
         uses: actions/cache@v2
