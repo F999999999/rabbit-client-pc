@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const HomePage = () => import("@/views/Home");
-const Login = () => import("@/views/Login");
+const LoginPage = () => import("@/views/Login/LoginPage");
 const TopCategoryPage = () => import("@/views/Category/TopCategoryPage");
 const SubCategoryPage = () => import("@/views/Category/SubCategoryPage");
 const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
@@ -17,7 +17,7 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    component: Login,
+    component: LoginPage,
   },
   // 分类
   {
