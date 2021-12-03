@@ -5,6 +5,7 @@ const importFn = require.context("./", false, /\.vue$/);
 const keys = importFn.keys();
 
 import lazy from "@/components/directive/lazy";
+import Message from "@/components/library/Message";
 
 export default {
   install(app) {
@@ -18,5 +19,8 @@ export default {
 
     // 图片懒加载
     app.directive("lazy", lazy);
+
+    // 将 Message 方法添加到全局属性
+    app.config.globalProperties.$message = Message;
   },
 };

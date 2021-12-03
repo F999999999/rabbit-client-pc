@@ -50,7 +50,9 @@
               <i class="iconfont icon-warning"></i>{{ accountAgreeError }}
             </div>
           </div>
-          <button type="submit" class="btn">登录</button>
+          <button type="submit" class="btn" @click="onAccountFormSubmit">
+            登录
+          </button>
         </form>
       </template>
       <!-- 短信登录 -->
@@ -95,7 +97,9 @@
               <i class="iconfont icon-warning"></i>{{ mobileAgreeError }}
             </div>
           </div>
-          <button type="submit" class="btn">登录</button>
+          <button type="submit" class="btn" @click="onMobileFormSubmit">
+            登录
+          </button>
         </form>
       </template>
     </div>
@@ -112,7 +116,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { getCurrentInstance, ref } from "vue";
 import { useField, useForm } from "vee-validate";
 import {
   account,
@@ -128,12 +132,16 @@ export default {
     // 是否为短信登录
     const isMsgLogin = ref(false);
 
+    // 获取当前组件实例
+    const { proxy } = getCurrentInstance();
+
     // accountFormHandleSubmit：处理账号登录表单提交 accountFormValid：包含其他验证字段
     const { accountFormHandleSubmit, ...accountFormValid } =
       useAccountFormValidate();
     // 账号登录表单提交时整体表单校验
     const onAccountFormSubmit = accountFormHandleSubmit((value) => {
       console.log(value, "onAccountFormSubmit");
+      proxy.$message({ type: "message", text: "账号登录表单校验成功" });
     });
 
     const { mobileFormHandleSubmit, ...mobileFormValid } =
@@ -141,6 +149,7 @@ export default {
     // 手机号登录表单提交时整体表单校验
     const onMobileFormSubmit = mobileFormHandleSubmit((value) => {
       console.log(value, "onMobileFormSubmit");
+      proxy.$message({ type: "message", text: "手机号登录表单提交" });
     });
 
     return {
