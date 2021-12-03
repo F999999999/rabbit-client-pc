@@ -3,7 +3,7 @@
     <a
       href="javascript:"
       :class="{ disabled: currentPage <= 1 }"
-      @click="currentPage = --currentPage < 1 ? 1 : currentPage"
+      @click="currentPage = --currentPage < 1 ? 1 : --currentPage"
     >
       上一页
     </a>
@@ -13,6 +13,7 @@
       :class="{ active: page === currentPage }"
       v-for="page in pageInfo.pageButtons"
       :key="page"
+      @click="currentPage = page"
     >
       {{ page }}
     </a>
@@ -22,7 +23,9 @@
       :class="{ disabled: currentPage >= pageInfo.totalPage }"
       @click="
         currentPage =
-          ++currentPage > pageInfo.totalPage ? pageInfo.totalPage : currentPage
+          ++currentPage > pageInfo.totalPage
+            ? pageInfo.totalPage
+            : ++currentPage
       "
     >
       下一页
@@ -31,16 +34,34 @@
 </template>
 <script>
 import { computed, ref } from "vue";
+import { useVModel } from "@vueuse/core";
 
 export default {
   name: "XtxPagination",
-  setup() {
+  props: {
     // 当前页码
-    const currentPage = ref(1);
+    page: {
+      type: Number,
+      default: 1,
+    },
     // 总数据量
-    const totalCount = ref(100);
+    count: {
+      type: Number,
+      default: 1,
+    },
     // 每页显示数据量
-    const pageSize = ref(10);
+    pageSize: {
+      type: Number,
+      default: 10,
+    },
+  },
+  setup(props, { emit }) {
+    // 当前页码
+    const currentPage = useVModel(props, "page", emit);
+    // 总数据量
+    const totalCount = computed(() => props.count);
+    // 每页显示数据量
+    const pageSize = computed(() => props.pageSize);
     // 页面需要显示的页码数量
     const pageButtonNumber = ref(5);
     // 页码计算偏移量

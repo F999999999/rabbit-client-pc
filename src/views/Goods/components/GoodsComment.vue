@@ -95,7 +95,12 @@
       </div>
     </div>
     <!-- 页码组件 -->
-    <XtxPagination />
+    <XtxPagination
+      v-if="commentList?.pages > 1"
+      v-model:page="reqParams.page"
+      :pageSize="reqParams.pageSize"
+      :count="commentList.counts"
+    />
   </div>
 </template>
 <script>
@@ -180,6 +185,8 @@ const useCommentList = () => {
   getCommentList(route.params.id);
   // 当路由更新时执行
   onBeforeRouteUpdate((to) => {
+    // 重置页码
+    reqParams.value.page = 1;
     // 更新商品评论列表
     getCommentList(to.params.id);
   });
@@ -224,6 +231,8 @@ const useCommentList = () => {
   watch(
     () => reqParams.value,
     () => {
+      // 重置页码
+      reqParams.value.page = 1;
       // 重新发送请求获取新的评论列表
       getCommentList(route.params.id, reqParams.value);
     }
