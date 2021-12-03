@@ -38,11 +38,6 @@ jobs:
           # 需要使用的 node 版本
           node-version: '14'
 
-      # 获取 yarn 的缓存目录路径
-      - name: Get yarn cache directory path 🔗
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
       # 缓存 node_modules
       - name: Cache dependencies 📦
         uses: actions/cache@v2
@@ -53,9 +48,9 @@ jobs:
             **/node_modules
           # 用于恢复和保存缓存的显式密钥
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-            # 如果键没有发生缓存命中，则用于恢复缓存的键的显式密钥
-            # restore-keys: |
-          # ${{ runner.os }}-yarn-
+          # 如果键没有发生缓存命中，则用于恢复缓存的键的显式密钥
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       # 安装依赖
       - name: Install dependencies 🔧
