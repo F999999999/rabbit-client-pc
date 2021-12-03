@@ -6,7 +6,7 @@
     <template v-slot:default>
       <ul class="goods-list" v-if="goodsData">
         <li v-for="item in goodsData" :key="item.id">
-          <RouterLink to="/">
+          <RouterLink :to="`/goods/${item.id}`">
             <img :src="item.picture" :alt="item.name" />
             <p class="name ellipsis">{{ item.name }}</p>
             <p class="price">&yen;{{ item.price }}</p>
@@ -42,20 +42,24 @@ export default {
   display: flex;
   justify-content: space-between;
   height: 406px;
+
   li {
     width: 306px;
     height: 406px;
     background: #f0f9f4;
     .hoverShadow();
+
     img {
       width: 306px;
       height: 306px;
     }
+
     p {
       font-size: 22px;
       padding: 12px 30px 0 30px;
       text-align: center;
     }
+
     .price {
       color: @priceColor;
     }

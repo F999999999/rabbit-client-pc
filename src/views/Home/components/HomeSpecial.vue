@@ -6,7 +6,7 @@
     <template v-slot:default>
       <div class="special-list">
         <div class="special-item" v-for="item in specialData" :key="item.id">
-          <RouterLink to="/">
+          <RouterLink :to="`/goods/${item.id}`">
             <img src="" v-lazy="item.cover" :alt="item.title" />
             <div class="meta">
               <p class="title">
@@ -54,25 +54,30 @@ export default {
 .home-panel {
   background: #f5f5f5;
 }
+
 .special-list {
   height: 380px;
   padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
+
   .special-item {
     width: 404px;
     background: #fff;
     .hoverShadow();
+
     a {
       display: block;
       width: 100%;
       height: 288px;
       position: relative;
+
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
+
       .meta {
         background-image: linear-gradient(
           to top,
@@ -84,6 +89,7 @@ export default {
         top: 0;
         width: 100%;
         height: 288px;
+
         .title {
           position: absolute;
           bottom: 0;
@@ -91,17 +97,20 @@ export default {
           padding-left: 16px;
           width: 70%;
           height: 70px;
+
           .top {
             color: #fff;
             font-size: 22px;
             display: block;
           }
+
           .sub {
             display: block;
             font-size: 19px;
             color: #999;
           }
         }
+
         .price {
           position: absolute;
           bottom: 25px;
@@ -115,6 +124,7 @@ export default {
         }
       }
     }
+
     .foot {
       height: 72px;
       line-height: 72px;
@@ -128,12 +138,14 @@ export default {
         margin-right: 5px;
         color: #999;
       }
+
       .like,
       .view {
         float: left;
         margin-right: 25px;
         vertical-align: middle;
       }
+
       .reply {
         float: right;
         vertical-align: middle;

@@ -50,7 +50,7 @@
       <!-- 商品推荐 -->
       <ul v-if="current.goods">
         <li v-for="goods in current.goods" :key="goods.id">
-          <RouterLink to="/">
+          <RouterLink :to="`/goods/${goods.id}`">
             <img :src="goods.picture" :alt="goods.name" />
             <div class="info">
               <p class="name ellipsis-2">{{ goods.name }}</p>
@@ -136,18 +136,22 @@ const useMenuList = () => {
   background: rgba(0, 0, 0, 0.8);
   position: relative;
   z-index: 99;
+
   .menu {
     li {
       padding-left: 40px;
       height: 50px;
       line-height: 50px;
+
       &:hover,
       &.active {
         background-color: @xtxColor;
       }
+
       a {
         margin-right: 4px;
         color: #fff;
+
         &:first-child {
           font-size: 16px;
         }
@@ -164,18 +168,22 @@ const useMenuList = () => {
     top: 0;
     display: none;
     padding: 0 15px;
+
     h4 {
       font-size: 20px;
       font-weight: normal;
       line-height: 80px;
+
       small {
         font-size: 16px;
         color: #666;
       }
     }
+
     ul {
       display: flex;
       flex-wrap: wrap;
+
       li {
         width: 310px;
         height: 120px;
@@ -184,36 +192,45 @@ const useMenuList = () => {
         border: 1px solid #eee;
         border-radius: 4px;
         background: #fff;
+
         &:nth-child(3n) {
           margin-right: 0;
         }
+
         a {
           display: flex;
           width: 100%;
           height: 100%;
           align-items: center;
           padding: 10px;
+
           &:hover {
             background: #e3f9f4;
           }
+
           img {
             width: 95px;
             height: 95px;
           }
+
           .info {
             padding-left: 10px;
             line-height: 24px;
             width: 190px;
+
             .name {
               font-size: 16px;
               color: #666;
             }
+
             .desc {
               color: #999;
             }
+
             .price {
               font-size: 22px;
               color: @priceColor;
+
               i {
                 font-size: 16px;
               }
@@ -224,16 +241,20 @@ const useMenuList = () => {
 
       li.brand {
         height: 180px;
+
         a {
           align-items: flex-start;
+
           img {
             width: 120px;
             height: 160px;
           }
+
           .info {
             p {
               margin-top: 8px;
             }
+
             .place {
               color: #999;
             }
@@ -242,6 +263,7 @@ const useMenuList = () => {
       }
     }
   }
+
   &:hover {
     .layer {
       display: block;
