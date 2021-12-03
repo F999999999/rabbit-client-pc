@@ -41,7 +41,7 @@ jobs:
       # 获取 yarn 的缓存目录路径
       - name: Get yarn cache directory path 🔗
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       # 缓存 node_modules
       - name: Cache dependencies 📦
