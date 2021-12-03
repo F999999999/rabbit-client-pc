@@ -1,5 +1,6 @@
 <template>
   <div class="goods-comment">
+    <!-- 筛选条件 -->
     <div class="head" v-if="commentInfo">
       <div class="data">
         <p>
@@ -58,6 +59,7 @@
         最热
       </a>
     </div>
+    <!-- 评价列表 -->
     <div class="list" v-if="commentList">
       <div class="item" v-for="item in commentList.items" :key="item.id">
         <div class="user">
@@ -92,6 +94,8 @@
         </div>
       </div>
     </div>
+    <!-- 页码组件 -->
+    <XtxPagination />
   </div>
 </template>
 <script>
