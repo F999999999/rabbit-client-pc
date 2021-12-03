@@ -44,8 +44,7 @@ jobs:
         id: yarn-cache
         with:
           # 需要缓存的文件、目录和通配符模式列表
-          path: |
-            **/node_modules
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           # 用于恢复和保存缓存的显式密钥
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           # 如果键没有发生缓存命中，则用于恢复缓存的键的显式密钥
