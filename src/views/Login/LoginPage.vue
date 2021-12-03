@@ -7,19 +7,19 @@
           href="javascript:"
           :class="{ active: activeLogin === 'account' }"
           @click="activeLogin = 'account'"
-          >账户登录</a
         >
+          账户登录
+        </a>
         <a
           href="javascript:"
           :class="{ active: activeLogin === 'qrcode' }"
           @click="activeLogin = 'qrcode'"
-          >扫码登录</a
         >
+          扫码登录
+        </a>
       </nav>
       <!-- 账号登录表单组件 -->
-      <div class="account-box" v-if="activeLogin === 'account'">
-        此处即将放置账号登录表单组件
-      </div>
+      <LoginForm v-if="activeLogin === 'account'" />
       <!-- 二维码登录 -->
       <div class="qrcode-box" v-if="activeLogin === 'qrcode'">
         <img src="@/assets/images/qrcode.jpg" alt="" />
@@ -33,10 +33,11 @@
 import LoginHeader from "@/views/Login/components/LoginHeader";
 import LoginFooter from "@/views/Login/components/LoginFooter";
 import { ref } from "vue";
+import LoginForm from "@/views/Login/components/LoginForm";
 
 export default {
   name: "LoginPage",
-  components: { LoginFooter, LoginHeader },
+  components: { LoginForm, LoginFooter, LoginHeader },
   setup() {
     const activeLogin = ref("account");
 
