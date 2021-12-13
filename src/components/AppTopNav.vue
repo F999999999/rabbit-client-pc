@@ -8,7 +8,7 @@
               <i class="iconfont icon-user"></i>{{ user.profile.account }}
             </a>
           </li>
-          <li><a href="javascript:">退出登录</a></li>
+          <li><a href="javascript:" @click="logout">退出登录</a></li>
         </template>
         <template v-else>
           <li>
@@ -30,13 +30,27 @@
 
 <script>
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "AppTopNav",
   setup() {
+    // 获取 store 数据
     const store = useStore();
+    // 获取 router 信息
+    const router = useRouter();
+    // 用户数据
     const user = store.state.user;
-    return { user };
+
+    // 退出登录
+    const logout = () => {
+      // 清除 store 中的 user/profile 数据
+      store.commit("user/setProfile", {});
+      // 跳转到登录页面
+      router.push("/login");
+    };
+
+    return { user, logout };
   },
 };
 </script>
