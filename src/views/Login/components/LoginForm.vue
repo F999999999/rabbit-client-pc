@@ -79,7 +79,11 @@
                 placeholder="请输入验证码"
                 v-model="codeField"
               />
-              <span class="code" @click="getMsgCode">
+              <span
+                class="code"
+                :class="{ disabled: isActive }"
+                @click="getMsgCode"
+              >
                 {{ isActive ? `剩余${count}秒` : "发送验证码" }}
               </span>
             </div>
@@ -269,7 +273,7 @@ const useMobileFormValidate = () => {
   // 单独校验手机号码是否通过
   const getMobileIsValidate = async () => {
     // 验证手机号, 获取验证结果
-    let { valid } = await mobileValidate();
+    const { valid } = await mobileValidate();
     // 返回验证结果
     return { isValid: valid, mobile: mobileField.value };
   };
