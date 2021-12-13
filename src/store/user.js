@@ -13,6 +13,7 @@ const user = {
   },
   mutations: {
     setProfile(state, payload) {
+      console.log(payload, "payload");
       // 判断 payload 对象是否为空
       if (Object.keys(payload).length !== 0) {
         state.profile = {

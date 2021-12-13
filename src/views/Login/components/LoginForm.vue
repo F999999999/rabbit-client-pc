@@ -79,7 +79,9 @@
                 placeholder="请输入验证码"
                 v-model="codeField"
               />
-              <span class="code">发送验证码</span>
+              <span class="code" @click="getMsgCode">
+                {{ isActive ? `剩余${count}秒` : "发送验证码" }}
+              </span>
             </div>
             <div class="error" v-if="codeError">
               <i class="iconfont icon-warning"></i>{{ codeError }}
@@ -116,7 +118,7 @@
   </div>
 </template>
 <script>
-import { getCurrentInstance, ref } from "vue";
+import { ref } from "vue";
 import { useField, useForm } from "vee-validate";
 import {
   account,
@@ -125,6 +127,14 @@ import {
   mobile,
   password,
 } from "@/utils/vee-validate-schema";
+import {
+  getLoginMsgCode,
+  loginByAccountAndPassword,
+  loginByMobileMsgCode,
+} from "@/api/user";
+import useLoginAfter from "@/hooks/useLoginAfter";
+import Message from "@/components/library/Message";
+import useCountDown from "@/hooks/useCountDown";
 
 export default {
   name: "LoginForm",
@@ -132,25 +142,59 @@ export default {
     // 是否为短信登录
     const isMsgLogin = ref(false);
 
-    // 获取当前组件实例
-    const { proxy } = getCurrentInstance();
+    // 登录成功或失败后执行的回调函数
+    const { loginSuccessful, loginFailed } = useLoginAfter();
 
+    // 账号密码登录表单校验
     // accountFormHandleSubmit：处理账号登录表单提交 accountFormValid：包含其他验证字段
     const { accountFormHandleSubmit, ...accountFormValid } =
       useAccountFormValidate();
     // 账号登录表单提交时整体表单校验
-    const onAccountFormSubmit = accountFormHandleSubmit((value) => {
-      console.log(value, "onAccountFormSubmit");
-      proxy.$message({ type: "message", text: "账号登录表单校验成功" });
-    });
+    const onAccountFormSubmit = accountFormHandleSubmit(
+      ({ account, password }) => {
+        // 发送请求进行账号密码登录
+        loginByAccountAndPassword({ account, password })
+          //  登录成功
+          .then(loginSuccessful)
+          // 登录失败
+          .catch(loginFailed);
+      }
+    );
 
-    const { mobileFormHandleSubmit, ...mobileFormValid } =
+    // 手机号登录表单校验
+    const { mobileFormHandleSubmit, getMobileIsValidate, ...mobileFormValid } =
       useMobileFormValidate();
     // 手机号登录表单提交时整体表单校验
-    const onMobileFormSubmit = mobileFormHandleSubmit((value) => {
-      console.log(value, "onMobileFormSubmit");
-      proxy.$message({ type: "message", text: "手机号登录表单提交" });
+    const onMobileFormSubmit = mobileFormHandleSubmit(({ mobile, code }) => {
+      // 发送请求进行手机号码登录
+      loginByMobileMsgCode({ mobile, code })
+        // 登录成功
+        .then(loginSuccessful)
+        // 登录失败
+        .catch(loginFailed);
     });
+
+    // 手机验证码获取间隔计时器
+    const { count, start, isActive } = useCountDown();
+    // 获取手机验证码
+    const getMsgCode = async () => {
+      // 进行手机号码表单校验
+      let { isValid, mobile } = await getMobileIsValidate();
+      // 判断校验结果是否为 true 并且没有在倒计时
+      if (isValid && !isActive.value) {
+        try {
+          // 发送请求获取手机验证码
+          await getLoginMsgCode(mobile);
+          // 验证码发送成功消息提示
+          Message({ type: "success", text: "验证码发送成功" });
+          // 开启定时器
+          start(60);
+        } catch (err) {
+          // 验证码发送失败消息提示
+          Message({ type: "error", text: err.response.data.message });
+        }
+      }
+    };
 
     return {
       isMsgLogin,
@@ -158,6 +202,9 @@ export default {
       onAccountFormSubmit,
       ...mobileFormValid,
       onMobileFormSubmit,
+      getMsgCode,
+      count,
+      isActive,
     };
   },
 };
@@ -208,12 +255,24 @@ const useMobileFormValidate = () => {
   });
 
   // 校验 手机号
-  const { value: mobileField, errorMessage: mobileError } = useField("mobile");
+  const {
+    value: mobileField,
+    errorMessage: mobileError,
+    validate: mobileValidate,
+  } = useField("mobile");
   // 校验 短信验证码
   const { value: codeField, errorMessage: codeError } = useField("code");
   // 校验 是否同意协议
   const { value: mobileAgreeField, errorMessage: mobileAgreeError } =
     useField("isAgree");
+
+  // 单独校验手机号码是否通过
+  const getMobileIsValidate = async () => {
+    // 验证手机号, 获取验证结果
+    let { valid } = await mobileValidate();
+    // 返回验证结果
+    return { isValid: valid, mobile: mobileField.value };
+  };
 
   return {
     mobileFormHandleSubmit,
@@ -223,6 +282,7 @@ const useMobileFormValidate = () => {
     codeError,
     mobileAgreeField,
     mobileAgreeError,
+    getMobileIsValidate,
   };
 };
 </script>
