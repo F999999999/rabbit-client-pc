@@ -56,10 +56,42 @@ export const getBindMobileMsgCode = (mobile) => {
  * @returns {Promise}
  */
 export const bindMobileAndQQ = ({ unionId, mobile, code }) => {
-  console.log(unionId, mobile, code);
   return requestWithOutToken("/login/social/bind", "post", {
     unionId,
     mobile,
     code,
+  });
+};
+
+/**
+ * 检测用户名是否唯一
+ * @param account 用户名
+ * @returns {Promise}
+ */
+export const checkUsernameIsUnique = (account) => {
+  return requestWithOutToken("/register/check", "get", { account });
+};
+
+/**
+ * 获取短信验证码（注册）
+ * @param mobile
+ * @returns {Promise}
+ */
+export const getRegisterMsgCode = (mobile) => {
+  return requestWithOutToken("/register/code", "get", { mobile });
+};
+
+export const createNewAccountBindQQ = ({
+  unionId,
+  account,
+  mobile,
+  code,
+  password,
+}) => {
+  return requestWithOutToken(`/login/social/${unionId}/complement`, "post", {
+    account,
+    mobile,
+    code,
+    password,
   });
 };
