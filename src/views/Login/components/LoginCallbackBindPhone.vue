@@ -25,12 +25,9 @@
           placeholder="短信验证码"
           v-model="codeField"
         />
-        <span
-          class="code"
-          :class="{ disabled: count > 0 }"
-          @click="getMsgCode"
-          >{{ count ? `剩余${count}秒` : "发送验证码" }}</span
-        >
+        <span class="code" :class="{ disabled: count > 0 }" @click="getMsgCode">
+          {{ count ? `剩余${count}秒` : "发送验证码" }}
+        </span>
       </div>
       <div class="error" v-if="codeError">{{ codeError }}</div>
     </div>
