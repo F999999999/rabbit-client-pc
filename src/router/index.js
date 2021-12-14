@@ -5,6 +5,7 @@ const LoginPage = () => import("@/views/Login/LoginPage");
 const TopCategoryPage = () => import("@/views/Category/TopCategoryPage");
 const SubCategoryPage = () => import("@/views/Category/SubCategoryPage");
 const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
+const LoginCallbackPage = () => import("@/views/Login/LoginCallbackPage");
 
 const routes = [
   // 首页
@@ -36,6 +37,12 @@ const routes = [
     path: "/goods/:id",
     name: "Goods",
     component: GoodsDetailPage,
+  },
+  // 登录回调
+  {
+    path: "/login/callback",
+    name: "LoginCallback",
+    component: LoginCallbackPage,
   },
 ];
 

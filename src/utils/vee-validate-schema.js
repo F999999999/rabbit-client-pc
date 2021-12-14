@@ -32,7 +32,7 @@ export const mobile = (value) => {
 };
 
 /**
- * 手机验证码校验规则
+ * 短信验证码校验规则
  * @param value
  * @returns {string|boolean}
  */

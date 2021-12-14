@@ -81,10 +81,10 @@
               />
               <span
                 class="code"
-                :class="{ disabled: isActive }"
+                :class="{ disabled: count > 0 }"
                 @click="getMsgCode"
               >
-                {{ isActive ? `剩余${count}秒` : "发送验证码" }}
+                {{ count ? `剩余${count}秒` : "发送验证码" }}
               </span>
             </div>
             <div class="error" v-if="codeError">
@@ -110,10 +110,15 @@
       </template>
     </div>
     <div class="action">
-      <img
-        src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
-        alt=""
-      />
+      <a
+        href="https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback"
+      >
+        <img
+          src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
+          alt=""
+        />
+      </a>
+
       <div class="url">
         <a href="javascript:">忘记密码</a>
         <a href="javascript:">免费注册</a>
@@ -178,16 +183,16 @@ export default {
         .catch(loginFailed);
     });
 
-    // 手机验证码获取间隔计时器
+    // 短信验证码获取间隔计时器
     const { count, start, isActive } = useCountDown();
-    // 获取手机验证码
+    // 获取短信验证码
     const getMsgCode = async () => {
       // 进行手机号码表单校验
       let { isValid, mobile } = await getMobileIsValidate();
       // 判断校验结果是否为 true 并且没有在倒计时
       if (isValid && !isActive.value) {
         try {
-          // 发送请求获取手机验证码
+          // 发送请求获取短信验证码
           await getLoginMsgCode(mobile);
           // 验证码发送成功消息提示
           Message({ type: "success", text: "验证码发送成功" });
@@ -208,7 +213,6 @@ export default {
       onMobileFormSubmit,
       getMsgCode,
       count,
-      isActive,
     };
   },
 };
