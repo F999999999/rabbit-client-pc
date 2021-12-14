@@ -78,7 +78,6 @@ export default {
       if (isActive.value) return;
       getMobileIsValidate()
         .then(({ isValid, mobile }) => {
-          console.log(isValid, mobile);
           // 判断手机号码是否校验成功
           if (isValid) return getBindMobileMsgCode(mobile);
         })

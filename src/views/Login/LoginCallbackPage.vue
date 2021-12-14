@@ -69,7 +69,6 @@ export default {
         findAccountByQQOpenid({ unionId: openid })
           // 查找到账号
           .then((res) => {
-            console.log(res);
             // 执行登录回调函数
             loginSuccessful(res);
             // 该用户已使用 QQ 绑定账号
@@ -78,8 +77,7 @@ export default {
             loading.value = false;
           })
           // 没有查找到账号
-          .catch((err) => {
-            console.log("----", err);
+          .catch(() => {
             // 该用户没有使用 QQ 绑定账号
             isBind.value = false;
             // 隐藏 Loading 状态
