@@ -35,6 +35,27 @@ const cart = {
       }
     },
   },
+  getters: {
+    // 可购买的商品列表
+    effectiveGoodsList(state) {
+      // 有效商品并且商品库存数量大于 0
+      return state.list.filter((item) => item.isEffective && item.stock > 0);
+    },
+    // 可购买商品总价
+    effectiveGoodsTotalPrice(state, getters) {
+      return getters.effectiveGoodsList.reduce(
+        (total, item) => total + Number(item.nowPrice) * item.count,
+        0
+      );
+    },
+    // 可购买商品数量
+    effectiveGoodsTotalCount(state, getters) {
+      return getters.effectiveGoodsList.reduce(
+        (count, item) => count + item.count,
+        0
+      );
+    },
+  },
 };
 
 export default cart;

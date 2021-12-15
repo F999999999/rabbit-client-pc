@@ -154,7 +154,7 @@ export default {
         // 商品库存
         stock: goodsDetailData.value.inventory,
         // 用户选择的商品数量
-        count: goodsDetailData.value,
+        count: goodsCount.value,
         // 用户选择的商品是否有效（用户选择的规格有库存并且没有被下架）
         isEffective: true,
       };
