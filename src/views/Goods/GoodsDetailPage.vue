@@ -41,7 +41,11 @@
               label="数量"
             />
             <!-- 加入购物车按钮 -->
-            <XtxButton type="primary" :style="{ 'margin-top': '20px' }">
+            <XtxButton
+              type="primary"
+              :style="{ 'margin-top': '20px' }"
+              @click="addCart"
+            >
               加入购物车
             </XtxButton>
           </div>
@@ -81,6 +85,8 @@ import GoodsSku from "@/views/Goods/components/GoodsSku";
 import GoodsTab from "@/views/Goods/components/GoodsTab";
 import GoodsHot from "@/views/Goods/components/GoodsHot";
 import GoodsWarn from "@/views/Goods/components/GoodsWarn";
+import Message from "@/components/library/Message";
+import { useStore } from "vuex";
 
 export default {
   name: "GoodsDetailPage",
@@ -96,6 +102,9 @@ export default {
     AppLayout,
   },
   setup() {
+    // 获取 store
+    const store = useStore();
+
     const { goodsDetailData } = goods();
 
     // 监听规格组件传递过来的数据
@@ -104,6 +113,12 @@ export default {
       goodsDetailData.value.price = sku.price;
       // 更新商品原价
       goodsDetailData.value.oldPrice = sku.oldPrice;
+      // 更新商品库存
+      goodsDetailData.value.inventory = sku.inventory;
+      // 更新商品 skuId
+      goodsDetailData.value.currentSelectedSkuId = sku.skuId;
+      // 更新商品规格属性文字
+      goodsDetailData.value.currentSelectedSkuText = sku.specsText;
     };
 
     // 购买数量
@@ -112,7 +127,51 @@ export default {
     // 使用 provide 共享数据给子组件
     provide("goodsDetailData", goodsDetailData);
 
-    return { goodsDetailData, onSpecChanged, goodsCount };
+    // 加入购物车
+    const addCart = () => {
+      // 判断用户是否选择了规格
+      if (!goodsDetailData.value.currentSelectedSkuId) {
+        return Message({ type: "error", text: "请选择商品规格" });
+      }
+      // 收集购物车所需的商品信息
+      const goods = {
+        // 商品id
+        id: goodsDetailData.value.id,
+        // 商品 skuId
+        skuId: goodsDetailData.value.currentSelectedSkuId,
+        // 商品名称
+        name: goodsDetailData.value.name,
+        // 商品规格属性文字
+        attrsText: goodsDetailData.value.currentSelectedSkuText,
+        // 商品图片
+        picture: goodsDetailData.value.mainPictures[0],
+        // 商品原价
+        price: goodsDetailData.value.oldPrice,
+        // 商品现价
+        nowPrice: goodsDetailData.value.price,
+        // 是否选中
+        selected: true,
+        // 商品库存
+        stock: goodsDetailData.value.inventory,
+        // 用户选择的商品数量
+        count: goodsDetailData.value,
+        // 用户选择的商品是否有效（用户选择的规格有库存并且没有被下架）
+        isEffective: true,
+      };
+      // 将商品添加到购物车中
+      store
+        .dispatch("cart/addGoodsToCart", goods)
+        // 添加成功
+        .then(() => {
+          Message({ type: "success", text: "商品已经成功添加到购物车" });
+        })
+        // 添加失败
+        .catch((err) => {
+          Message({ type: "error", text: err.response.message });
+        });
+    };
+
+    return { goodsDetailData, onSpecChanged, goodsCount, addCart };
   },
 };
 
