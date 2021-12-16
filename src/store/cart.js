@@ -22,6 +22,13 @@ const cart = {
         state.list.unshift(goods);
       }
     },
+    // 根据 skuId 删除购物车的商品
+    deleteGoodsOfCartBySkuId(state, skuId) {
+      // 在购物车列表中查找当前需要删除的商品
+      const index = state.list.findIndex((item) => item.skuId === skuId);
+      // 如果购物车中存在该商品则将商品从购物车列表中删除
+      if (index >= 0) state.list.splice(index, 1);
+    },
   },
   actions: {
     // 将商品添加到购物车
@@ -32,6 +39,16 @@ const cart = {
       } else {
         // 未登录
         commit("addGoodsToCart", goods);
+      }
+    },
+    // 根据 skuId 删除购物车的商品
+    deleteGoodsOfCartBySkuId({ rootState, commit }, skuId) {
+      // 判断用户是否登录
+      if (rootState.user.profile.token) {
+        // 登录
+      } else {
+        // 未登录
+        commit("deleteGoodsOfCartBySkuId", skuId);
       }
     },
   },

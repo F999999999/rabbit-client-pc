@@ -1,12 +1,12 @@
 <template>
   <div class="cart">
-    <a class="curr" href="#">
+    <RouterLink class="curr" to="/cart">
       <i class="iconfont icon-cart"></i><em>{{ effectiveGoodsTotalCount }}</em>
-    </a>
-    <div class="layer">
+    </RouterLink>
+    <div class="layer" v-if="effectiveGoodsTotalCount > 0 && !isCartPage">
       <div class="list">
         <div class="item" v-for="goods in effectiveGoodsList" :key="goods.id">
-          <RouterLink to="">
+          <RouterLink :to="`/goods/${goods.id}`">
             <img :src="goods.picture" alt="" />
             <div class="center">
               <p class="name ellipsis-2">{{ goods.name }}</p>
@@ -17,7 +17,10 @@
               <p class="count">x{{ goods.count }}</p>
             </div>
           </RouterLink>
-          <i class="iconfont icon-close-new"></i>
+          <i
+            class="iconfont icon-close-new"
+            @click="deleteGoodsOfCartBySkuId(goods.skuId)"
+          ></i>
         </div>
       </div>
       <div class="foot">
@@ -25,7 +28,9 @@
           <p>共 {{ effectiveGoodsTotalCount }} 件商品</p>
           <p>&yen;{{ effectiveGoodsTotalPrice }}</p>
         </div>
-        <XtxButton type="plain">去购物车结算</XtxButton>
+        <XtxButton type="plain">
+          <RouterLink to="/cart">去购物车结算</RouterLink>
+        </XtxButton>
       </div>
     </div>
   </div>
@@ -33,13 +38,26 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import Message from "@/components/library/Message";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 export default {
   name: "AppHeaderCart",
   setup() {
     // 获取 store
     const store = useStore();
+    // 获取 route
+    const route = useRoute();
+
+    // 当前是否在购物车页面
+    const isCartPage = ref(route.path === "/cart");
+    // 当路由更新时执行
+    onBeforeRouteUpdate((to) => {
+      // 重新判断是否在购物车页面
+      isCartPage.value = to.path === "/cart";
+    });
+
     // 可购买商品列表
     const effectiveGoodsList = computed(
       () => store.getters["cart/effectiveGoodsList"]
@@ -52,11 +70,19 @@ export default {
     const effectiveGoodsTotalCount = computed(
       () => store.getters["cart/effectiveGoodsTotalCount"]
     );
+    // 删除购物车商品
+    const deleteGoodsOfCartBySkuId = (skuId) => {
+      store
+        .dispatch("cart/deleteGoodsOfCartBySkuId", skuId)
+        .then(() => Message({ type: "success", text: "删除成功" }));
+    };
 
     return {
       effectiveGoodsList,
       effectiveGoodsTotalPrice,
       effectiveGoodsTotalCount,
+      deleteGoodsOfCartBySkuId,
+      isCartPage,
     };
   },
 };
