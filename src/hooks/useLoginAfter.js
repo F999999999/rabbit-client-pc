@@ -33,7 +33,6 @@ const useLoginAfter = () => {
 
   // 登录失败
   const loginFailed = (err) => {
-    console.log(err);
     // 信息提示
     Message({ type: "error", text: err.message });
   };
