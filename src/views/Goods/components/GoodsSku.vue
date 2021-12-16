@@ -149,6 +149,8 @@ export default {
             .map((spec) => `${spec.name}：${spec.valueName}`)
             .join(" "),
         });
+      } else {
+        emit("onSpecChanged", { skuId: null });
       }
     };
 
@@ -201,25 +203,31 @@ const createPathMap = (skus) => {
     cursor: not-allowed;
   }
 }
+
 .goods-sku {
   padding-left: 10px;
   padding-top: 20px;
+
   dl {
     display: flex;
     padding-bottom: 5px;
     align-items: center;
+
     dt {
       width: 50px;
       color: #999;
     }
+
     dd {
       flex: 1;
       color: #666;
+
       > img {
         width: 50px;
         height: 50px;
         .sku-state-mixin ();
       }
+
       > span {
         display: inline-block;
         height: 30px;

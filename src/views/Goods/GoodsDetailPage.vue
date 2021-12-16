@@ -110,15 +110,18 @@ export default {
     // 监听规格组件传递过来的数据
     const onSpecChanged = (sku) => {
       // 更新商品现价
-      goodsDetailData.value.price = sku.price;
+      goodsDetailData.value.price = sku.price || goodsDetailData.value.price;
       // 更新商品原价
-      goodsDetailData.value.oldPrice = sku.oldPrice;
+      goodsDetailData.value.oldPrice =
+        sku.oldPrice || goodsDetailData.value.oldPrice;
       // 更新商品库存
-      goodsDetailData.value.inventory = sku.inventory;
+      goodsDetailData.value.inventory =
+        sku.inventory || goodsDetailData.value.inventory;
       // 更新商品 skuId
       goodsDetailData.value.currentSelectedSkuId = sku.skuId;
       // 更新商品规格属性文字
-      goodsDetailData.value.currentSelectedSkuText = sku.specsText;
+      goodsDetailData.value.currentSelectedSkuText =
+        sku.specsText || goodsDetailData.value.specsText;
     };
 
     // 购买数量
