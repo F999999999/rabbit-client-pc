@@ -34,16 +34,20 @@ export default {
 .xtx-checkbox {
   display: inline-block;
   margin-right: 2px;
+
   .icon-checked {
     color: @xtxColor;
+
     ~ span {
       color: @xtxColor;
     }
   }
+
   i {
     position: relative;
     top: 1px;
   }
+
   span {
     margin-left: 2px;
   }

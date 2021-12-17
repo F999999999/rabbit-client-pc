@@ -6,6 +6,7 @@ const TopCategoryPage = () => import("@/views/Category/TopCategoryPage");
 const SubCategoryPage = () => import("@/views/Category/SubCategoryPage");
 const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
 const LoginCallbackPage = () => import("@/views/Login/LoginCallbackPage");
+const CartPage = () => import("@/views/Cart/CartPage");
 
 const routes = [
   // 首页
@@ -43,6 +44,12 @@ const routes = [
     path: "/login/callback",
     name: "LoginCallback",
     component: LoginCallbackPage,
+  },
+  // 购物车
+  {
+    path: "/cart",
+    name: "CartPage",
+    component: CartPage,
   },
 ];
 
