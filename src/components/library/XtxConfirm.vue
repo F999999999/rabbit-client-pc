@@ -41,9 +41,11 @@ export default {
     },
     onSureButtonClick: {
       type: Function,
+      default: () => {},
     },
     onCancelButtonClick: {
       type: Function,
+      default: () => {},
     },
   },
 };
