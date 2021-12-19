@@ -11,7 +11,12 @@
             <thead>
               <tr>
                 <th>
-                  <XtxCheckbox>全选</XtxCheckbox>
+                  <XtxCheckbox
+                    v-model="selectAllButtonStatus"
+                    @update:modelValue="selectAllGoods($event)"
+                  >
+                    全选
+                  </XtxCheckbox>
                 </th>
                 <th>商品信息</th>
                 <th>单价</th>
@@ -22,9 +27,17 @@
             </thead>
             <!-- 有效商品 -->
             <tbody>
-              <tr v-for="goods in effectiveGoodsList" :key="goods.id">
+              <tr v-if="effectiveGoodsTotalCount === 0">
+                <td colspan="6">
+                  <EmptyCart />
+                </td>
+              </tr>
+              <tr v-else v-for="goods in effectiveGoodsList" :key="goods.id">
                 <td>
-                  <XtxCheckbox v-model="goods.selected" />
+                  <XtxCheckbox
+                    v-model="goods.selected"
+                    @update:modelValue="selectGoods(goods.skuId, $event)"
+                  />
                 </td>
                 <td>
                   <div class="goods">
@@ -58,7 +71,14 @@
                 </td>
                 <td class="tc">
                   <p><a href="javascript:">移入收藏夹</a></p>
-                  <p><a class="green" href="javascript:">删除</a></p>
+                  <p>
+                    <a
+                      class="green"
+                      href="javascript:"
+                      @click="deleteGoodsOfCartBySkuId(goods.skuId)"
+                      >删除</a
+                    >
+                  </p>
                   <p><a href="javascript:">找相似</a></p>
                 </td>
               </tr>
@@ -91,7 +111,14 @@
                   <p>&yen;{{ (goods.nowPrice * goods.count).toFixed(2) }}</p>
                 </td>
                 <td class="tc">
-                  <p><a class="green" href="javascript:">删除</a></p>
+                  <p>
+                    <a
+                      class="green"
+                      href="javascript:"
+                      @click="deleteGoodsOfCartBySkuId(goods.skuId)"
+                      >删除</a
+                    >
+                  </p>
                   <p><a href="javascript:">找相似</a></p>
                 </td>
               </tr>
@@ -126,10 +153,12 @@ import AppLayout from "@/components/AppLayout";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import Message from "@/components/library/Message";
+import EmptyCart from "@/views/Cart/components/EmptyCart";
+import Confirm from "@/components/library/Confirm";
 
 export default {
   name: "CartPage",
-  components: { GoodsRelevant, AppLayout },
+  components: { EmptyCart, GoodsRelevant, AppLayout },
   setup() {
     // 获取 store
     const store = useStore();
@@ -159,12 +188,40 @@ export default {
       Message({ type: "success", text: "购物车商品信息更新成功" });
     });
 
+    // 全选
+    const selectAllButtonStatus = computed(
+      () => store.getters["cart/selectAllButtonStatus"]
+    );
+    // 更新全选选项
+    const selectAllGoods = (isAll) => {
+      store.dispatch("cart/selectIsAll", isAll);
+    };
+    // 更新单选选项
+    const selectGoods = (skuId, isSelect) => {
+      // 根据 skuId 更新单个商品信息
+      store.dispatch("cart/updateGoodsOfCartBySkuId", {
+        skuId,
+        selected: isSelect,
+      });
+    };
+
+    // 删除商品
+    const deleteGoodsOfCartBySkuId = (skuId) => {
+      Confirm({ content: "您确定要删除该商品吗？" }).then(() =>
+        store.dispatch("cart/deleteGoodsOfCartBySkuId", skuId)
+      );
+    };
+
     return {
       effectiveGoodsList,
       effectiveGoodsTotalCount,
       invalidGoodsList,
       userSelectedGoodsCount,
       userSelectedGoodsPrice,
+      selectAllButtonStatus,
+      selectAllGoods,
+      selectGoods,
+      deleteGoodsOfCartBySkuId,
     };
   },
 };

@@ -33,12 +33,17 @@ const cart = {
     },
     // 根据 skuId 更新商品信息
     updateGoodsBySkuId(state, partOfGoods) {
-      // 根据 skuId 查找商品
-      let goods = state.list.find((item) => item.skuId === partOfGoods.skuId);
+      // 根据 skuId 查找商品在购物车列表中的索引
+      let index = state.list.findIndex(
+        (item) => item.skuId === partOfGoods.skuId
+      );
       // 判断是否找到了商品
-      if (goods) {
+      if (index >= 0) {
         // 更新商品数据
-        goods = { ...goods, ...partOfGoods };
+        state.list[index] = {
+          ...state.list[index],
+          ...partOfGoods,
+        };
       }
     },
   },
@@ -87,6 +92,28 @@ const cart = {
         });
       }
     },
+    // 根据 skuId 更新选中状态和商品数量
+    updateGoodsOfCartBySkuId({ rootState, commit }, goods) {
+      // 判断用户是否登录
+      if (rootState.user.profile.token) {
+        // 登录
+      } else {
+        // 未登录
+        commit("updateGoodsBySkuId", goods);
+      }
+    },
+    // 更新全选按钮状态
+    selectIsAll({ rootState, getters, commit }, isAll) {
+      // 判断用户是否登录
+      if (rootState.user.profile.token) {
+        // 登录
+      } else {
+        // 未登录
+        getters.effectiveGoodsList.forEach((item) => {
+          commit("updateGoodsBySkuId", { skuId: item.skuId, selected: isAll });
+        });
+      }
+    },
   },
   getters: {
     // 可购买的商品列表
@@ -131,7 +158,15 @@ const cart = {
         0
       );
     },
+    // 全选按钮的状态
+    selectAllButtonStatus(state, getters) {
+      // 有效商品数量大于 0 并且和选中商品的数量相等则代表所有有效商品已选中
+      return (
+        getters.effectiveGoodsList.length > 0 &&
+        getters.userSelectedGoodsList.length ===
+          getters.effectiveGoodsList.length
+      );
+    },
   },
 };
-
 export default cart;
