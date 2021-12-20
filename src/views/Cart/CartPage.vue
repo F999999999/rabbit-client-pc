@@ -54,15 +54,19 @@
                   <p>&yen;{{ goods.nowPrice }}</p>
                   <p v-if="goods.price - goods.nowPrice > 0">
                     比加入时降价
-                    <span class="red"
-                      >&yen;{{
-                        (goods.price - goods.nowPrice).toFixed(2)
-                      }}</span
-                    >
+                    <span class="red">
+                      &yen;{{ (goods.price - goods.nowPrice).toFixed(2) }}
+                    </span>
                   </p>
                 </td>
                 <td class="tc">
-                  <XtxNumberBox></XtxNumberBox>
+                  <XtxNumberBox
+                    :max="goods.stock"
+                    :modelValue="goods.count"
+                    @update:modelValue="
+                      changeGoodsCountOfCartBySkuId(goods.skuId, $event)
+                    "
+                  ></XtxNumberBox>
                 </td>
                 <td class="tc">
                   <p class="f16 red">
@@ -76,8 +80,9 @@
                       class="green"
                       href="javascript:"
                       @click="deleteGoodsOfCartBySkuId(goods.skuId)"
-                      >删除</a
                     >
+                      删除
+                    </a>
                   </p>
                   <p><a href="javascript:">找相似</a></p>
                 </td>
@@ -262,6 +267,11 @@ export default {
       );
     };
 
+    // 更改购物车中的商品数量
+    const changeGoodsCountOfCartBySkuId = (skuId, count) => {
+      store.dispatch("cart/updateGoodsOfCartBySkuId", { skuId, count });
+    };
+
     return {
       effectiveGoodsList,
       effectiveGoodsTotalCount,
@@ -273,6 +283,7 @@ export default {
       selectGoods,
       deleteGoodsOfCartBySkuId,
       deleteGoodsOfCartByUserSelectedOrInvalid,
+      changeGoodsCountOfCartBySkuId,
     };
   },
 };
