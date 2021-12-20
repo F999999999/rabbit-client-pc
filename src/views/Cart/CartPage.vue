@@ -134,7 +134,7 @@
             <a href="javascript:">清空失效商品</a>
           </div>
           <div class="total">
-            共 {{ effectiveGoodsCount }} 件商品，已选择
+            共 {{ effectiveGoodsTotalCount }} 件商品，已选择
             {{ userSelectedGoodsCount }} 件，商品合计：
             <span class="red">¥{{ userSelectedGoodsPrice }}</span>
             <XtxButton type="primary">下单结算</XtxButton>
