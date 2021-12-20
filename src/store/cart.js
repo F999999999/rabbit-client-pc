@@ -114,6 +114,21 @@ const cart = {
         });
       }
     },
+    // 删除用户选择的商品或清空无效商品
+    deleteGoodsOfCartByUserSelectedOrInvalid(
+      { rootState, getters, commit },
+      flag
+    ) {
+      // 判断用户是否登录
+      if (rootState.user.profile.token) {
+        // 登录
+      } else {
+        // 未登录
+        getters[flag].forEach((item) => {
+          commit("deleteGoodsOfCartBySkuId", item.skuId);
+        });
+      }
+    },
   },
   getters: {
     // 可购买的商品列表
