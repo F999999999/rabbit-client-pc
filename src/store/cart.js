@@ -1,4 +1,4 @@
-import { updateLocalCart } from "@/api/cart";
+import { getCartList, mergeCart, updateLocalCart } from "@/api/cart";
 
 const cart = {
   //  使用命名空间模块
@@ -46,6 +46,10 @@ const cart = {
         };
       }
     },
+    // 设置购物车列表
+    setCart(state, payload) {
+      state.list = payload;
+    },
   },
   actions: {
     // 将商品添加到购物车
@@ -73,6 +77,10 @@ const cart = {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 获取服务器端购物车列表数据
+        const data = await getCartList();
+        // 存储数据到 vueX 中
+        commit("setCart", data.result);
       } else {
         // 未登录
         // 遍历购物车的商品
@@ -127,6 +135,26 @@ const cart = {
         getters[flag].forEach((item) => {
           commit("deleteGoodsOfCartBySkuId", item.skuId);
         });
+      }
+    },
+    // 合并购物车
+    async mergeCart({ state, commit }) {
+      // 如果本地购物车中没有数据 不进行合并
+      if (state.list.length === 0) return;
+      // 合并购物车接口所需参数
+      const carts = state.list.map((item) => ({
+        skuId: item.skuId,
+        selected: item.selected,
+        count: item.count,
+      }));
+      try {
+        // 合并购物车
+        await mergeCart(carts);
+        // 清空本地购物车数据
+        commit("setCart", []);
+      } catch (err) {
+        // 购物车合并失败 抛出异常
+        throw new Error(err);
       }
     },
   },
@@ -184,4 +212,5 @@ const cart = {
     },
   },
 };
+
 export default cart;

@@ -47,6 +47,10 @@
                     <div>
                       <p class="name ellipsis">{{ goods.name }}</p>
                       <!-- 选择规格组件 -->
+                      <CartSku
+                        :attrsText="goods.attrsText"
+                        :skuId="goods.skuId"
+                      />
                     </div>
                   </div>
                 </td>
@@ -181,10 +185,11 @@ import { computed } from "vue";
 import Message from "@/components/library/Message";
 import EmptyCart from "@/views/Cart/components/EmptyCart";
 import Confirm from "@/components/library/Confirm";
+import CartSku from "@/views/Cart/components/CartSku";
 
 export default {
   name: "CartPage",
-  components: { EmptyCart, GoodsRelevant, AppLayout },
+  components: { CartSku, EmptyCart, GoodsRelevant, AppLayout },
   setup() {
     // 获取 store
     const store = useStore();
