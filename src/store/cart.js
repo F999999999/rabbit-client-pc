@@ -3,6 +3,7 @@ import {
   deleteGoodsOfCartBySkuIdsApi,
   getCartList,
   mergeCart,
+  updateGoodsOfCartBySkuIdApi,
   updateLocalCart,
 } from "@/api/cart";
 
@@ -118,10 +119,14 @@ const cart = {
       }
     },
     // 根据 skuId 更新选中状态和商品数量
-    updateGoodsOfCartBySkuId({ rootState, commit }, goods) {
+    async updateGoodsOfCartBySkuId({ rootState, commit, dispatch }, goods) {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 更新商品信息
+        await updateGoodsOfCartBySkuIdApi(goods);
+        // 更新商品列表
+        dispatch("updateCartList");
       } else {
         // 未登录
         commit("updateGoodsBySkuId", goods);

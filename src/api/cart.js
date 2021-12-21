@@ -54,3 +54,14 @@ export const addGoodsToCartApi = ({ skuId, count }) => {
 export const deleteGoodsOfCartBySkuIdsApi = (ids) => {
   return requestWithToken("/member/cart", "delete", { ids });
 };
+
+/**
+ * 更新购物车中的商品信息
+ * @param skuId 商品 skuId
+ * @param selected 选中状态
+ * @param count 商品数量
+ * @returns {Promise}
+ */
+export const updateGoodsOfCartBySkuIdApi = ({ skuId, selected, count }) => {
+  return requestWithToken(`/member/cart/${skuId}`, "put", { selected, count });
+};
