@@ -44,8 +44,10 @@ export default {
 
     // 退出登录
     const logout = () => {
-      // 清除 store 中的 user/profile 数据
+      // 清除 store 中的 用户信息 数据
       store.commit("user/setProfile", {});
+      // 清除 store 中的 购物车商品列表 数据
+      store.commit("cart/setCart", []);
       // 跳转到登录页面
       router.push("/login");
     };
