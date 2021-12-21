@@ -81,7 +81,7 @@ const cart = {
       if (rootState.user.profile.token) {
         // 登录
         // 发送请求 删除服务器端的购物车商品
-        await deleteGoodsOfCartBySkuIdsApi(skuId);
+        await deleteGoodsOfCartBySkuIdsApi([skuId]);
         // 更新购物车列表
         dispatch("updateCartList");
       } else {
@@ -140,13 +140,19 @@ const cart = {
       }
     },
     // 删除用户选择的商品或清空无效商品
-    deleteGoodsOfCartByUserSelectedOrInvalid(
-      { rootState, getters, commit },
+    async deleteGoodsOfCartByUserSelectedOrInvalid(
+      { rootState, getters, commit, dispatch },
       flag
     ) {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 获取要批量删除商品的 skuId 数组
+        const skuIds = getters[flag].map((item) => item.skuId);
+        // 发送请求 批量删除商品
+        await deleteGoodsOfCartBySkuIdsApi(skuIds);
+        // 更新商品列表
+        dispatch("updateCartList");
       } else {
         // 未登录
         getters[flag].forEach((item) => {

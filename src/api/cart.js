@@ -48,9 +48,9 @@ export const addGoodsToCartApi = ({ skuId, count }) => {
 
 /**
  * 删除购物车中的商品
- * @param skuId 商品 skuId
+ * @param ids 商品 skuId 数组
  * @returns {Promise}
  */
-export const deleteGoodsOfCartBySkuIdsApi = (skuId) => {
-  return requestWithToken("/member/cart", "delete", { ids: skuId });
+export const deleteGoodsOfCartBySkuIdsApi = (ids) => {
+  return requestWithToken("/member/cart", "delete", { ids });
 };
