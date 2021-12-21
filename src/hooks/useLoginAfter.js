@@ -1,5 +1,5 @@
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Message from "@/components/library/Message";
 
 const useLoginAfter = () => {
@@ -7,6 +7,8 @@ const useLoginAfter = () => {
   const store = useStore();
   // 获取 router 信息
   const router = useRouter();
+  // 获取 route 信息
+  const route = useRoute();
   // 登录成功
   const loginSuccessful = async ({ result }) => {
     // 存储用户信息
@@ -25,8 +27,10 @@ const useLoginAfter = () => {
       token: result.token,
     });
 
-    // 跳转到首页
-    router.push("/").then(() => {
+    // 目标地址
+    const redirectURL = route.query.redirectURL || "/";
+    // 跳转到目标地址
+    router.push(redirectURL).then(() => {
       // 消息提示
       Message({ type: "success", text: "登录成功" });
     });

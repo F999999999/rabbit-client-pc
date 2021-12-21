@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import authGuard from "@/router/authGuard";
 
 const HomePage = () => import("@/views/Home");
 const LoginPage = () => import("@/views/Login/LoginPage");
@@ -58,5 +59,8 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
   routes,
 });
+
+// 路由前置拦截器
+router.beforeEach(authGuard);
 
 export default router;
