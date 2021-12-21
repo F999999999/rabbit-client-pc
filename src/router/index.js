@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import authGuard from "@/router/authGuard";
+import CheckoutPage from "@/views/Pay/CheckoutPage";
 
 const HomePage = () => import("@/views/Home");
 const LoginPage = () => import("@/views/Login/LoginPage");
@@ -51,6 +52,11 @@ const routes = [
     path: "/cart",
     name: "CartPage",
     component: CartPage,
+  },
+  // 结算
+  {
+    path: "/checkout/order",
+    component: CheckoutPage,
   },
 ];
 
