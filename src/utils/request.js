@@ -17,6 +17,8 @@ instanceWithToken.interceptors.request.use((config) => {
     //将 Token 添加到请求头中
     config.headers.Authorization = `Bearer ${token}`;
   }
+  // 返回修改后的配置信息
+  return config;
 });
 //配置响应拦截器
 instanceWithToken.interceptors.response.use(
