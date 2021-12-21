@@ -45,3 +45,12 @@ export const getCartList = () => {
 export const addGoodsToCartApi = ({ skuId, count }) => {
   return requestWithToken("/member/cart", "post", { skuId, count });
 };
+
+/**
+ * 删除购物车中的商品
+ * @param skuId 商品 skuId
+ * @returns {Promise}
+ */
+export const deleteGoodsOfCartBySkuIdsApi = (skuId) => {
+  return requestWithToken("/member/cart", "delete", { ids: skuId });
+};

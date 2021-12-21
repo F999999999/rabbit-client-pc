@@ -1,5 +1,6 @@
 import {
   addGoodsToCartApi,
+  deleteGoodsOfCartBySkuIdsApi,
   getCartList,
   mergeCart,
   updateLocalCart,
@@ -75,10 +76,14 @@ const cart = {
       }
     },
     // 根据 skuId 删除购物车的商品
-    deleteGoodsOfCartBySkuId({ rootState, commit }, skuId) {
+    async deleteGoodsOfCartBySkuId({ rootState, commit, dispatch }, skuId) {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 发送请求 删除服务器端的购物车商品
+        await deleteGoodsOfCartBySkuIdsApi(skuId);
+        // 更新购物车列表
+        dispatch("updateCartList");
       } else {
         // 未登录
         commit("deleteGoodsOfCartBySkuId", skuId);
