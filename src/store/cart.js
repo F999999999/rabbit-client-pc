@@ -3,6 +3,7 @@ import {
   deleteGoodsOfCartBySkuIdsApi,
   getCartList,
   mergeCart,
+  selectOrUnselectCartGoodsApi,
   updateGoodsOfCartBySkuIdApi,
   updateLocalCart,
 } from "@/api/cart";
@@ -133,10 +134,16 @@ const cart = {
       }
     },
     // 更新全选按钮状态
-    selectIsAll({ rootState, getters, commit }, isAll) {
+    async selectIsAll({ rootState, getters, commit, dispatch }, isAll) {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 获取商品 skuId 数组
+        const ids = getters.effectiveGoodsList.map((item) => item.skuId);
+        // 发送请求 切换全选状态
+        await selectOrUnselectCartGoodsApi({ ids, selected: isAll });
+        // 更新购物车商品列表
+        dispatch("updateCartList");
       } else {
         // 未登录
         getters.effectiveGoodsList.forEach((item) => {
