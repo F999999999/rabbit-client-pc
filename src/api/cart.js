@@ -35,3 +35,13 @@ export const mergeCart = (cart) => {
 export const getCartList = () => {
   return requestWithToken("/member/cart", "get");
 };
+
+/**
+ * 将商品加入购物车
+ * @param skuId 商品 skuId
+ * @param count 商品数量
+ * @returns {Promise}
+ */
+export const addGoodsToCartApi = ({ skuId, count }) => {
+  return requestWithToken("/member/cart", "post", { skuId, count });
+};

@@ -1,4 +1,9 @@
-import { getCartList, mergeCart, updateLocalCart } from "@/api/cart";
+import {
+  addGoodsToCartApi,
+  getCartList,
+  mergeCart,
+  updateLocalCart,
+} from "@/api/cart";
 
 const cart = {
   //  使用命名空间模块
@@ -53,10 +58,17 @@ const cart = {
   },
   actions: {
     // 将商品添加到购物车
-    addGoodsToCart({ rootState, commit }, goods) {
+    async addGoodsToCart({ rootState, commit, dispatch }, goods) {
       // 判断用户是否登录
       if (rootState.user.profile.token) {
         // 登录
+        // 发送请求 将商品添加到服务器端购物车
+        await addGoodsToCartApi({
+          skuId: goods.skuId,
+          count: goods.count,
+        });
+        // 更新购物车列表
+        dispatch("updateCartList");
       } else {
         // 未登录
         commit("addGoodsToCart", goods);
@@ -212,5 +224,4 @@ const cart = {
     },
   },
 };
-
 export default cart;
