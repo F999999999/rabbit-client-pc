@@ -192,6 +192,44 @@ const cart = {
         throw new Error(err);
       }
     },
+    // 更新商品信息
+    async updateGoodsOfCartBySkuChanged(
+      { rootState, state, commit, dispatch },
+      { oldSkuId, userSelectedNewSku }
+    ) {
+      // 判断用户是否登录
+      if (rootState.user.profile.token) {
+        // 登录
+        // 通过原有商品信息获取用户选择的商品数据
+        const oldGoods = state.list.find((item) => item.skuId === oldSkuId);
+        // 删除原有商品
+        await deleteGoodsOfCartBySkuIdsApi([oldSkuId]);
+        // 添加新商品
+        await addGoodsToCartApi({
+          skuId: userSelectedNewSku.skuId,
+          count: oldGoods.count,
+        });
+        // 更新购物车商品列表
+        await dispatch("updateCartList");
+      } else {
+        // 未登录
+        // 根据旧的 skuId 查找旧商品
+        const oldGoods = state.list.find((item) => item.skuId === oldSkuId);
+        // 根据旧商品生成新商品
+        const newGoods = {
+          ...oldGoods,
+          skuId: userSelectedNewSku.skuId,
+          stock: userSelectedNewSku.inventory,
+          oldPrice: userSelectedNewSku.oldPrice,
+          nowPrice: userSelectedNewSku.price,
+          attrsText: userSelectedNewSku.specsText,
+        };
+        // 删除旧商品
+        commit("deleteGoodsOfCartBySkuId", oldSkuId);
+        // 插入新商品
+        commit("addGoodsToCart", newGoods);
+      }
+    },
   },
   getters: {
     // 可购买的商品列表

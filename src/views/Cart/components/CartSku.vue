@@ -90,7 +90,7 @@ export default {
     let userSelectedNewSku = null;
     // 监听规格信息变化
     const onSpecChanged = (sku) => {
-      userSelectedNewSku.value = sku;
+      userSelectedNewSku = sku;
     };
     // 提交更新规格信息
     const submitSku = () => {
@@ -105,7 +105,7 @@ export default {
         return Message({ type: "warn", text: "商品规格信息没有发生变化" });
       }
       // 更新规格信息
-      store.dispatch("cart/updateGoodsOfCartBySkuId", {
+      store.dispatch("cart/updateGoodsOfCartBySkuChanged", {
         oldSkuId: props.skuId,
         userSelectedNewSku,
       });
