@@ -167,7 +167,9 @@
             共 {{ effectiveGoodsTotalCount }} 件商品，已选择
             {{ userSelectedGoodsCount }} 件，商品合计：
             <span class="red">¥{{ userSelectedGoodsPrice }}</span>
-            <XtxButton type="primary">下单结算</XtxButton>
+            <XtxButton type="primary" @click="jumpToCheckout"
+              >下单结算
+            </XtxButton>
           </div>
         </div>
         <!-- 猜你喜欢 -->
@@ -186,6 +188,7 @@ import Message from "@/components/library/Message";
 import EmptyCart from "@/views/Cart/components/EmptyCart";
 import Confirm from "@/components/library/Confirm";
 import CartSku from "@/views/Cart/components/CartSku";
+import router from "@/router";
 
 export default {
   name: "CartPage",
@@ -277,6 +280,15 @@ export default {
       store.dispatch("cart/updateGoodsOfCartBySkuId", { skuId, count });
     };
 
+    // 下单结算
+    const jumpToCheckout = () => {
+      // 判断用户是否选中了商品
+      if (userSelectedGoodsCount.value === 0)
+        return Message({ type: "error", text: "请至少选择一件商品" });
+      // 跳转到结算页面
+      router.push("/checkout/order");
+    };
+
     return {
       effectiveGoodsList,
       effectiveGoodsTotalCount,
@@ -289,6 +301,7 @@ export default {
       deleteGoodsOfCartBySkuId,
       deleteGoodsOfCartByUserSelectedOrInvalid,
       changeGoodsCountOfCartBySkuId,
+      jumpToCheckout,
     };
   },
 };
