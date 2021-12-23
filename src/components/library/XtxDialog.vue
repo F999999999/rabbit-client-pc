@@ -1,6 +1,6 @@
 <template>
-  <div class="xtx-dialog fade" v-if="isRendering">
-    <div class="wrapper">
+  <div class="xtx-dialog" v-if="isRendering" v-fade>
+    <div class="wrapper" v-fade>
       <div class="header">
         <h3>{{ title }}</h3>
         <a
