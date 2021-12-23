@@ -30,7 +30,12 @@
           <div class="item">
             <p>支付平台</p>
             <a class="btn wx" href="javascript:"></a>
-            <a class="btn alipay" href="javascript:"></a>
+            <a
+              class="btn alipay"
+              :href="payUrl"
+              target="_blank"
+              @click="paying = true"
+            ></a>
           </div>
           <div class="item">
             <p>支付方式</p>
@@ -41,6 +46,20 @@
             <a class="btn" href="javascript:">交通银行</a>
           </div>
         </div>
+        <!-- 正在支付 -->
+        <XtxDialog title="正在支付..." v-model:visible="paying">
+          <div class="pay-wait">
+            <img src="@/assets/images/load.gif" alt="" />
+            <div v-if="info">
+              <p>如果支付成功：</p>
+              <RouterLink :to="`/member/order/${info.id}`">
+                查看订单详情>
+              </RouterLink>
+              <p>如果支付失败：</p>
+              <RouterLink to="/">查看相关疑问></RouterLink>
+            </div>
+          </div>
+        </XtxDialog>
       </div>
     </div>
   </AppLayout>
@@ -53,10 +72,12 @@ import { ref } from "vue";
 import { getOrderInfoByIdApi } from "@/api/order";
 import useCountDown from "@/hooks/useCountDown";
 import dayjs from "dayjs";
+import { baseURL } from "@/utils/request";
+import XtxDialog from "@/components/library/XtxDialog";
 
 export default {
   name: "PayPage",
-  components: { AppLayout },
+  components: { XtxDialog, AppLayout },
   setup() {
     // 获取 route
     const route = useRoute();
@@ -72,7 +93,19 @@ export default {
       start(res.result.countdown);
     });
 
-    return { info, count, dayjs };
+    // 支付结果回调地址
+    // 回调地址必须经过编码, 否则回调时地址中 # 号后面的内容将支付宝被截取掉
+    // 比如: http://www.corho.com:8080/?payResult=true&orderId=1440510371952594945#/
+    const redirect = encodeURIComponent(
+      "http://www.corho.com:8080/#/pay/callback"
+    );
+    // 跳转到支付地址
+    const payUrl = `/${baseURL}pay/aliPay?orderId=${route.query.orderId}&redirect=${redirect}`;
+
+    // 是否正在支付
+    const paying = ref(false);
+
+    return { info, count, dayjs, payUrl, paying };
   },
 };
 </script>
@@ -162,6 +195,20 @@ export default {
       background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg)
         no-repeat center / contain;
     }
+  }
+}
+
+.pay-wait {
+  display: flex;
+  justify-content: space-around;
+
+  p {
+    margin-top: 30px;
+    font-size: 14px;
+  }
+
+  a {
+    color: @xtxColor;
   }
 }
 </style>
