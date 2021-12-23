@@ -49,14 +49,23 @@ export default {
     const addAddress = () => {
       // 初始化收货地址参数
       addressEditInstance.value.address = {
-        receiver: "",
-        contact: "",
+        // 省编码
         provinceCode: "",
+        // 市编码
         cityCode: "",
+        // 区编码
         countyCode: "",
+        // 收货人
+        receiver: "",
+        // 手机号码
+        contact: "",
+        // 详细地址
         address: "",
+        // 邮政编码
         postalCode: "",
+        // 地址标签
         addressTags: "",
+        // 是否设置为默认地址
         isDefault: false,
       };
       // 显示弹层
