@@ -100,7 +100,7 @@ export default {
       "http://www.corho.com:8080/#/pay/callback"
     );
     // 跳转到支付地址
-    const payUrl = `/${baseURL}pay/aliPay?orderId=${route.query.orderId}&redirect=${redirect}`;
+    const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.orderId}&redirect=${redirect}`;
 
     // 是否正在支付
     const paying = ref(false);
