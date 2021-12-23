@@ -13,14 +13,44 @@
     </div>
     <div class="action">
       <XtxButton class="btn">切换地址</XtxButton>
-      <XtxButton class="btn">添加地址</XtxButton>
+      <XtxButton class="btn" @click="addAddress">添加地址</XtxButton>
     </div>
+    <AddressEdit ref="addressEditInstance" />
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import AddressEdit from "@/views/Pay/components/AddressEdit";
+
 export default {
   name: "CheckoutAddress",
+  components: { AddressEdit },
+  setup() {
+    // 编辑收货地址组件实例对象
+    const addressEditInstance = ref();
+    // 添加收货地址
+    const addAddress = () => {
+      // 初始化收货地址参数
+      addressEditInstance.value.address = {
+        receiver: "",
+        contact: "",
+        provinceCode: "",
+        cityCode: "",
+        countyCode: "",
+        address: "",
+        postalCode: "",
+        addressTags: "",
+        isDefault: false,
+      };
+      // 清空城市信息
+      addressEditInstance.value.location = "";
+      // 显示对话框
+      addressEditInstance.value.visible = true;
+    };
+
+    return { addressEditInstance, addAddress };
+  },
 };
 </script>
 
