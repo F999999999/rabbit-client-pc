@@ -34,3 +34,12 @@ export const getAddressListApi = () => {
 export const updateAddressByIdApi = (id, address) => {
   return requestWithToken(`/member/address/${id}`, "put", address);
 };
+
+/**
+ * 提交订单
+ * @param order 订单对象
+ * @returns {Promise}
+ */
+export const submitOrderApi = (order) => {
+  return requestWithToken("/member/order", "post", order);
+};
