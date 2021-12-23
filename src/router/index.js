@@ -10,6 +10,7 @@ const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
 const LoginCallbackPage = () => import("@/views/Login/LoginCallbackPage");
 const CartPage = () => import("@/views/Cart/CartPage");
 const PayPage = () => import("@/views/Pay/PayPage");
+const PayResultPage = () => import("@/views/Pay/PayResultPage");
 
 const routes = [
   // 首页
@@ -63,6 +64,11 @@ const routes = [
   {
     path: "/checkout/pay",
     component: PayPage,
+  },
+  // 支付成功回调页面
+  {
+    path: "/pay/callback",
+    component: PayResultPage,
   },
 ];
 
