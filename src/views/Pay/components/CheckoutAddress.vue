@@ -22,12 +22,20 @@
       <a href="javascript:" @click="modifyAddress">修改地址</a>
     </div>
     <div class="action">
-      <XtxButton class="btn">切换地址</XtxButton>
+      <XtxButton class="btn" @click="switchAddress">切换地址</XtxButton>
       <XtxButton class="btn" @click="addAddress">添加地址</XtxButton>
     </div>
+    <!-- 添加地址 -->
     <AddressEdit
       ref="addressEditInstance"
       @onAddressChanged="updateUserSelectedAddress($event)"
+    />
+    <!-- 切换地址 -->
+    <AddressSwitch
+      ref="addressSwitchInstance"
+      :list="addresses"
+      @onAddressChanged="updateUserSelectedAddress($event)"
+      :activeAddressId="finalAddress?.id"
     />
   </div>
 </template>
@@ -36,15 +44,15 @@
 import { computed, ref } from "vue";
 import AddressEdit from "@/views/Pay/components/AddressEdit";
 import { getAddressListApi } from "@/api/order";
+import AddressSwitch from "@/views/Pay/components/AddressSwitch";
 
 export default {
   name: "CheckoutAddress",
-  components: { AddressEdit },
+  components: { AddressSwitch, AddressEdit },
   setup() {
     // 当前渲染的收货地址
     const { finalAddress, updateUserSelectedAddress } = getAddresses();
-    // 编辑收货地址组件实例对象
-    const addressEditInstance = ref();
+
     // 添加收货地址
     const addAddress = () => {
       // 初始化收货地址参数
@@ -71,6 +79,9 @@ export default {
       // 显示弹层
       addressEditInstance.value.visible = true;
     };
+
+    // 编辑收货地址组件实例对象
+    const addressEditInstance = ref();
     // 修改收货地址
     const modifyAddress = () => {
       // 获取当前要修改的收货地址信息
@@ -89,12 +100,24 @@ export default {
       addressEditInstance.value.visible = true;
     };
 
+    // 切换地址组件实例对象
+    const addressSwitchInstance = ref();
+    // 获取收货地址列表
+    const { addresses } = getAddresses();
+    // 切换收货地址
+    const switchAddress = () => {
+      addressSwitchInstance.value.visible = true;
+    };
+
     return {
       finalAddress,
       addressEditInstance,
       addAddress,
       updateUserSelectedAddress,
       modifyAddress,
+      addressSwitchInstance,
+      addresses,
+      switchAddress,
     };
   },
 };
@@ -147,7 +170,7 @@ const getAddresses = () => {
     });
   };
 
-  return { finalAddress, updateUserSelectedAddress };
+  return { addresses, finalAddress, updateUserSelectedAddress };
 };
 </script>
 
