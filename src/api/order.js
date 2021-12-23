@@ -43,3 +43,12 @@ export const updateAddressByIdApi = (id, address) => {
 export const submitOrderApi = (order) => {
   return requestWithToken("/member/order", "post", order);
 };
+
+/**
+ * 根据订单ID获取订单详情
+ * @param id 订单ID
+ * @returns {Promise}
+ */
+export const getOrderInfoByIdApi = (id) => {
+  return requestWithToken(`/member/order/${id}`, "get");
+};
