@@ -1,13 +1,23 @@
 <template>
   <div class="address">
     <div class="text">
-      <!-- <div class="none">您需要先添加收货地址才可提交订单。</div> -->
-      <ul>
+      <div class="none" v-if="!finalAddress">
+        您需要先添加收货地址才可提交订单。
+      </div>
+      <ul v-if="finalAddress">
         <li>
-          <span>收<i />货<i />人：</span>朱超
+          <span>收<i />货<i />人：</span>
+          {{ finalAddress.receiver }}
         </li>
-        <li><span>联系方式：</span>132****2222</li>
-        <li><span>收货地址：</span>海南省三亚市解放路108号物质大厦1003室</li>
+        <li>
+          <span>联系方式：</span>
+          {{ finalAddress.contact.replace(/(\d{3})\d{4}(\d{4})/g, `$1****$2`) }}
+        </li>
+        <li>
+          <span>收货地址：</span>
+          {{ finalAddress.fullLocation }}
+          {{ finalAddress.address }}
+        </li>
       </ul>
       <a href="javascript:">修改地址</a>
     </div>
@@ -15,18 +25,24 @@
       <XtxButton class="btn">切换地址</XtxButton>
       <XtxButton class="btn" @click="addAddress">添加地址</XtxButton>
     </div>
-    <AddressEdit ref="addressEditInstance" />
+    <AddressEdit
+      ref="addressEditInstance"
+      @onAddressChanged="updateUserSelectedAddress($event)"
+    />
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import AddressEdit from "@/views/Pay/components/AddressEdit";
+import { getAddressListApi } from "@/api/order";
 
 export default {
   name: "CheckoutAddress",
   components: { AddressEdit },
   setup() {
+    // 当前渲染的收货地址
+    const { finalAddress, updateUserSelectedAddress } = getAddresses();
     // 编辑收货地址组件实例对象
     const addressEditInstance = ref();
     // 添加收货地址
@@ -49,8 +65,66 @@ export default {
       addressEditInstance.value.visible = true;
     };
 
-    return { addressEditInstance, addAddress };
+    return {
+      finalAddress,
+      addressEditInstance,
+      addAddress,
+      updateUserSelectedAddress,
+    };
   },
+};
+
+// 获取收货地址列表
+const getAddresses = () => {
+  // 收货地址列表
+  const addresses = ref(null);
+  // 获取收货地址列表
+  const getData = (callback) => {
+    // 发送请求获取收货地址列表
+    getAddressListApi().then((res) => {
+      // 存储收货地址列表
+      addresses.value = res.result;
+      // 执行回调
+      callback && callback();
+    });
+  };
+  // 初始化收货地址列表
+  getData();
+
+  // 用户新增的收货地址或者切换的收货地址
+  const userSelectedAddress = ref();
+  // 计算最终需要渲染到页面中的收货地址
+  const finalAddress = computed(() => {
+    let result = null;
+    // 如果用户添加了新的收货地址或者切换了收货地址
+    if (userSelectedAddress.value) {
+      // 优先渲染
+      result = userSelectedAddress.value;
+    } else {
+      // 判断收货地址列表中是否存在收货地址
+      if (addresses.value && addresses.value.length > 0) {
+        // 渲染默认收货地址
+        result = addresses.value.find((item) => item.isDefault === 0);
+        // 如果默认收货地址不存在
+        if (!result) {
+          // 渲染收货地址列表中的第一条收货地址
+          result = addresses.value[0];
+        }
+      }
+    }
+    return result;
+  });
+
+  // 更新用户添加的收货地址或者切换的收货地址
+  const updateUserSelectedAddress = (id) => {
+    getData(() => {
+      userSelectedAddress.value = addresses.value.find(
+        (item) => item.id === id
+      );
+    });
+  };
+
+  return { finalAddress, updateUserSelectedAddress };
 };
 </script>
 

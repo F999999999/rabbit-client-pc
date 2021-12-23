@@ -16,3 +16,11 @@ export const createOrderApi = () => {
 export const addAddressApi = (addAddress) => {
   return requestWithToken("/member/address", "post", addAddress);
 };
+
+/**
+ * 获取收货地址列表
+ * @returns {Promise}
+ */
+export const getAddressListApi = () => {
+  return requestWithToken("/member/address", "get");
+};

@@ -95,7 +95,7 @@ import Message from "@/components/library/Message";
 
 export default {
   name: "AddressEdit",
-  setup() {
+  setup(props, { emit }) {
     // 弹框是否显示
     const visible = ref(false);
     // 用户填写的收货地址
@@ -136,11 +136,13 @@ export default {
       };
       // 发送请求添加收货地址
       addAddressApi(target)
-        .then(() => {
+        .then((res) => {
           // 关闭对话框
           visible.value = false;
           // 用户提示
           Message({ type: "success", text: "收货地址添加成功" });
+          // 通知父组件 渲染当前用户新添加的收货地址
+          emit("onAddressChanged", res.result.id);
         })
         .catch((err) =>
           Message({
