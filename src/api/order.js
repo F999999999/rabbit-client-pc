@@ -24,3 +24,13 @@ export const addAddressApi = (addAddress) => {
 export const getAddressListApi = () => {
   return requestWithToken("/member/address", "get");
 };
+
+/**
+ * 修改收货地址
+ * @param id 收货地址ID
+ * @param address 新的收货地址信息
+ * @returns {Promise}
+ */
+export const updateAddressByIdApi = (id, address) => {
+  return requestWithToken(`/member/address/${id}`, "put", address);
+};

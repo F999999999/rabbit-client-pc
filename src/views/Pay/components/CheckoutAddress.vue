@@ -19,7 +19,7 @@
           {{ finalAddress.address }}
         </li>
       </ul>
-      <a href="javascript:">修改地址</a>
+      <a href="javascript:" @click="modifyAddress">修改地址</a>
     </div>
     <div class="action">
       <XtxButton class="btn">切换地址</XtxButton>
@@ -59,9 +59,24 @@ export default {
         addressTags: "",
         isDefault: false,
       };
-      // 清空城市信息
-      addressEditInstance.value.location = "";
-      // 显示对话框
+      // 显示弹层
+      addressEditInstance.value.visible = true;
+    };
+    // 修改收货地址
+    const modifyAddress = () => {
+      // 获取当前要修改的收货地址信息
+      const { fullLocation, isDefault, ...rest } = finalAddress.value;
+      // 将要修改的收货地址信息显示在弹层中
+      addressEditInstance.value.address = {
+        ...rest,
+        // 0 为默认地址 1 为非默认地址
+        isDefault: isDefault === 0,
+      };
+      // 设置城市选择组件数据
+      setTimeout(() => {
+        addressEditInstance.value.xtxCityInstance.location = fullLocation;
+      }, 0);
+      // 显示弹层
       addressEditInstance.value.visible = true;
     };
 
@@ -70,6 +85,7 @@ export default {
       addressEditInstance,
       addAddress,
       updateUserSelectedAddress,
+      modifyAddress,
     };
   },
 };
@@ -85,7 +101,7 @@ const getAddresses = () => {
       // 存储收货地址列表
       addresses.value = res.result;
       // 执行回调
-      callback && callback();
+      callback && callback(res.result);
     });
   };
   // 初始化收货地址列表
@@ -117,10 +133,8 @@ const getAddresses = () => {
 
   // 更新用户添加的收货地址或者切换的收货地址
   const updateUserSelectedAddress = (id) => {
-    getData(() => {
-      userSelectedAddress.value = addresses.value.find(
-        (item) => item.id === id
-      );
+    getData((list) => {
+      userSelectedAddress.value = list.find((item) => item.id === id);
     });
   };
 

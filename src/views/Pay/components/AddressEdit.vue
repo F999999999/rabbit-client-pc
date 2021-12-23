@@ -1,5 +1,9 @@
 <template>
-  <XtxDialog v-model:visible="visible" title="添加收货地址">
+  <XtxDialog
+    v-model:visible="visible"
+    :title="`${address?.id ? '修改' : '添加'}收货地址`"
+    ref="xtxDialogInstance"
+  >
     <template v-slot:default>
       <div class="address-edit">
         <div class="xtx-form">
@@ -29,6 +33,7 @@
               <XtxCity
                 placeholder="请选择所在地区"
                 @onCityChanged="onCityChanged"
+                ref="xtxCityInstance"
               />
             </div>
           </div>
@@ -83,14 +88,16 @@
       >
         取消
       </XtxButton>
-      <XtxButton type="primary" @click="onSureClickHandler">确认</XtxButton>
+      <XtxButton type="primary" @click="onSureClickHandler">
+        {{ address?.id ? "修改" : "添加" }}
+      </XtxButton>
     </template>
   </XtxDialog>
 </template>
 
 <script>
 import { ref } from "vue";
-import { addAddressApi } from "@/api/order";
+import { addAddressApi, updateAddressByIdApi } from "@/api/order";
 import Message from "@/components/library/Message";
 
 export default {
@@ -98,6 +105,10 @@ export default {
   setup(props, { emit }) {
     // 弹框是否显示
     const visible = ref(false);
+    // 弹层
+    const xtxDialogInstance = ref(null);
+    // 城市选择组件
+    const xtxCityInstance = ref();
     // 用户填写的收货地址
     const address = ref({
       // 省编码
@@ -132,24 +143,45 @@ export default {
       // 生成请求产参数
       const target = {
         ...address.value,
-        isDefault: address.value.isDefault ? 1 : 0,
+        // 0 为默认地址 1 为非默认地址
+        isDefault: address.value.isDefault ? 0 : 1,
       };
-      // 发送请求添加收货地址
-      addAddressApi(target)
-        .then((res) => {
-          // 关闭对话框
-          visible.value = false;
-          // 用户提示
-          Message({ type: "success", text: "收货地址添加成功" });
-          // 通知父组件 渲染当前用户新添加的收货地址
-          emit("onAddressChanged", res.result.id);
-        })
-        .catch((err) =>
-          Message({
-            type: "error",
-            text: `收货地址添加失败 ${err.response.data.message}`,
+      // 判断当前是添加还是修改
+      if (target.id) {
+        // 修改
+        // 发送请求修改收货地址
+        updateAddressByIdApi(target.id, target)
+          .then(() => {
+            // 关闭弹层
+            xtxDialogInstance.value.destroy();
+            // 通知父组件 渲染当前修改的收货地址
+            emit("onAddressChanged", target.id);
           })
-        );
+          .catch((err) => {
+            Message({
+              type: "error",
+              text: `收货地址修改失败 ${err.response.data.message}`,
+            });
+          });
+      } else {
+        // 添加
+        // 发送请求添加收货地址
+        addAddressApi(target)
+          .then((res) => {
+            // 关闭弹层
+            visible.value = false;
+            // 用户提示
+            Message({ type: "success", text: "收货地址添加成功" });
+            // 通知父组件 渲染当前用户新添加的收货地址
+            emit("onAddressChanged", res.result.id);
+          })
+          .catch((err) =>
+            Message({
+              type: "error",
+              text: `收货地址添加失败 ${err.response.data.message}`,
+            })
+          );
+      }
     };
 
     return {
@@ -157,6 +189,8 @@ export default {
       address,
       onSureClickHandler,
       onCityChanged,
+      xtxCityInstance,
+      xtxDialogInstance,
     };
   },
 };
