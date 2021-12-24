@@ -19,7 +19,32 @@ const worker = setupWorker(
   rest.get(`${baseURL}member/collect`, (req, res, ctx) => {
     return res(
       ctx.json({
-        msg: "成功",
+        code: "1",
+        msg: "操作成功",
+        result: {
+          counts: 50,
+          page: req.url.searchParams.get("page"),
+          pageSize: req.url.searchParams.get("pageSize"),
+          pages: 0,
+          items: makeArray(req.url.searchParams.get("pageSize"), () => ({
+            id: faker.datatype.uuid(),
+            name: faker.internet.userName(),
+            desc: faker.commerce.productDescription(),
+            price: faker.commerce.price(),
+            picture: `http://zhoushugang.gitee.io/erabbit-client-pc-static/uploads/clothes_goods_${faker.datatype.number(
+              { min: 1, max: 8 }
+            )}.jpg`,
+          })),
+        },
+      })
+    );
+  }),
+  // 模拟我的足迹接口
+  rest.get(`${baseURL}member/browseHistory`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        code: "1",
+        msg: "操作成功",
         result: {
           counts: 50,
           page: req.url.searchParams.get("page"),
@@ -39,5 +64,4 @@ const worker = setupWorker(
     );
   })
 );
-
 export default worker;

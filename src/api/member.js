@@ -18,3 +18,13 @@ export const getCollectionApi = ({
     pageSize,
   });
 };
+
+/**
+ * 获取我的足迹
+ * @param page 页面（默认值：1）
+ * @param pageSize 需要获取的数据量（默认值：10）
+ * @returns {Promise}
+ */
+export const getBrowseHistoryApi = ({ page = 1, pageSize = 10 }) => {
+  return requestWithToken("/member/browseHistory", "get", { page, pageSize });
+};
