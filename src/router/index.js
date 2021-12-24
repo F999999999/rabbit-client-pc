@@ -102,6 +102,10 @@ const router = createRouter({
   history: createWebHashHistory(),
   scrollBehavior: () => ({ top: 0 }),
   routes,
+  // 模糊匹配：active-class
+  linkActiveClass: "fuzzy-active",
+  // 精确匹配：exact-active-class
+  linkExactActiveClass: "exact-active",
 });
 
 // 路由前置拦截器
