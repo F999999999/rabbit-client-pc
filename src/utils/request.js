@@ -3,7 +3,7 @@ import store from "@/store";
 import router from "@/router";
 
 // 配置基准请求地址
-export const baseURL = "https://pcapi-xiaotuxian-front-devtest.itheima.net";
+export const baseURL = "https://pcapi-xiaotuxian-front-devtest.itheima.net/";
 
 // 创建一个新的 axios 实例对象，用于配置和小兔鲜服务器端相关的请求
 // 带 Token 的 axios 实例
