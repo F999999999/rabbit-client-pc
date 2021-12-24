@@ -11,6 +11,7 @@ const LoginCallbackPage = () => import("@/views/Login/LoginCallbackPage");
 const CartPage = () => import("@/views/Cart/CartPage");
 const PayPage = () => import("@/views/Pay/PayPage");
 const PayResultPage = () => import("@/views/Pay/PayResultPage");
+const MemberHomePage = () => import("@/views/Member/MemberHomePage");
 
 const routes = [
   // 首页
@@ -69,6 +70,11 @@ const routes = [
   {
     path: "/pay/callback",
     component: PayResultPage,
+  },
+  // 个人中心
+  {
+    path: "/member/home",
+    component: MemberHomePage,
   },
 ];
 
