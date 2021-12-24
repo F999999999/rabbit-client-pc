@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import authGuard from "@/router/authGuard";
-import CheckoutPage from "@/views/Pay/CheckoutPage";
 
 const HomePage = () => import("@/views/Home");
 const LoginPage = () => import("@/views/Login/LoginPage");
@@ -9,9 +8,13 @@ const SubCategoryPage = () => import("@/views/Category/SubCategoryPage");
 const GoodsDetailPage = () => import("@/views/Goods/GoodsDetailPage");
 const LoginCallbackPage = () => import("@/views/Login/LoginCallbackPage");
 const CartPage = () => import("@/views/Cart/CartPage");
+const CheckoutPage = () => import("@/views/Pay/CheckoutPage");
 const PayPage = () => import("@/views/Pay/PayPage");
 const PayResultPage = () => import("@/views/Pay/PayResultPage");
 const MemberHomePage = () => import("@/views/Member/MemberHomePage");
+const OrderView = () => import("@/views/Member/OrderView");
+const OrderListPage = () => import("@/views/Member/OrderListPage");
+const OrderDetailPage = () => import("@/views/Member/OrderDetailPage");
 
 const routes = [
   // 首页
@@ -75,6 +78,23 @@ const routes = [
   {
     path: "/member/home",
     component: MemberHomePage,
+  },
+  // 订单列表
+  {
+    path: "/member/order",
+    component: OrderView,
+    children: [
+      // 订单列表
+      {
+        path: "",
+        component: OrderListPage,
+      },
+      // 订单详情
+      {
+        path: ":id",
+        component: OrderDetailPage,
+      },
+    ],
   },
 ];
 

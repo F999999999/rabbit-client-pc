@@ -3,7 +3,15 @@
     <div class="user-manage">
       <h4>我的账户</h4>
       <div class="links">
-        <a href="javascript:">个人中心</a>
+        <!-- 精确匹配：exact-active-class -->
+        <!-- 模糊匹配：active-class -->
+        <RouterLink
+          to="/member/home"
+          exact-active-class="exact-active"
+          active-class="fuzzy-active"
+        >
+          个人中心
+        </RouterLink>
         <a href="javascript:">消息通知</a>
         <a href="javascript:">个人信息</a>
         <a href="javascript:">安全设置</a>
@@ -15,7 +23,13 @@
       </div>
       <h4>交易管理</h4>
       <div class="links">
-        <a href="javascript:">我的订单</a>
+        <RouterLink
+          to="/member/order"
+          exact-active-class="exact-active"
+          active-class="fuzzy-active"
+        >
+          我的订单
+        </RouterLink>
         <a href="javascript:">优惠券</a>
         <a href="javascript:">礼品卡</a>
         <a href="javascript:">评价晒单</a>
