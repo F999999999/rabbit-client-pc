@@ -34,7 +34,13 @@
         >
           立即付款
         </XtxButton>
-        <XtxButton type="gray" size="small">取消订单</XtxButton>
+        <XtxButton
+          type="gray"
+          size="small"
+          @click="onCancelOrderHandler(orderDetail.id)"
+        >
+          取消订单
+        </XtxButton>
       </template>
       <!-- 待发货 -->
       <template v-if="orderDetail.orderState === 2">
@@ -59,12 +65,21 @@
       </template>
       <!-- 已取消 -->
     </div>
+    <!-- 取消订单弹框 -->
+    <CancelOrder
+      ref="cancelOrderComponent"
+      @onReloadOrderList="getOrderDetail(orderDetail.id)"
+    />
   </div>
 </template>
 
 <script>
+import CancelOrder from "@/views/Member/Order/components/CancelOrder";
+import { ref } from "vue";
+
 export default {
   name: "DetailAction",
+  components: { CancelOrder },
   props: {
     orderDetail: {
       type: Object,
@@ -74,6 +89,19 @@ export default {
       type: Function,
       default: () => {},
     },
+  },
+  setup() {
+    // 取消订单弹框组件实例对象
+    const cancelOrderComponent = ref();
+    // 当用户点击取消按钮时
+    const onCancelOrderHandler = (id) => {
+      // 渲染取消订单弹层
+      cancelOrderComponent.value.visible = true;
+      // 通过组件实例对象传递要取消订单的订单ID
+      cancelOrderComponent.value.id = id;
+    };
+
+    return { onCancelOrderHandler, cancelOrderComponent };
   },
 };
 </script>
