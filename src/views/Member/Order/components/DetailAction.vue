@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-action">
+  <div class="detail-action" v-if="orderDetail">
     <div class="state">
       <span class="iconfont icon-order-unpay"></span>
       <p>
