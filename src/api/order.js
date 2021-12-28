@@ -82,3 +82,12 @@ export const deleteOrderApi = (ids) => {
 export const confirmReceiptGoodsApi = (id) => {
   return requestWithToken(`/member/order/${id}/receipt`, "put");
 };
+
+/**
+ * 根据订单ID创建新的订单
+ * @param id 订单ID
+ * @returns {Promise}
+ */
+export const createOrderByIdApi = (id) => {
+  return requestWithToken(`/member/order/repurchase/${id}`, "get");
+};

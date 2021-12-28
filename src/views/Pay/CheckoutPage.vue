@@ -96,10 +96,14 @@
 <script>
 import AppLayout from "@/components/AppLayout";
 import { ref } from "vue";
-import { createOrderApi, submitOrderApi } from "@/api/order";
+import {
+  createOrderApi,
+  createOrderByIdApi,
+  submitOrderApi,
+} from "@/api/order";
 import CheckoutAddress from "@/views/Pay/components/CheckoutAddress";
 import Message from "@/components/library/Message";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
@@ -117,14 +121,24 @@ export default {
 const getOrderInfo = () => {
   // 收货地址组件实例对象
   const checkoutAddressInstance = ref();
+  // 获取路由信息
+  const route = useRoute();
   // 获取 router
   const router = useRouter();
   // 获取 store
   const store = useStore();
   // 订单信息
   const order = ref(null);
-  // 创建订单
-  createOrderApi().then((res) => (order.value = res.result));
+  // 判断是否有订单ID
+  if (route.query.id) {
+    // 如果有订单ID根据订单ID创建新的订单
+    createOrderByIdApi(route.query.id).then(
+      (res) => (order.value = res.result)
+    );
+  } else {
+    // 如果没有订单ID 根据服务器端购物车创建订单
+    createOrderApi().then((res) => (order.value = res.result));
+  }
 
   // 提交订单
   const referOrder = () => {
