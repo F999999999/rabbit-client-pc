@@ -8,7 +8,7 @@
         v-if="order.orderState === 1 && order.countdown !== -1"
       >
         <i class="iconfont icon-down-time"></i>
-        <b>付款截止：{{ timeText }}</b>
+        <b>付款截止：{{ dayjs.unix(timeText).format("mm分ss秒") }}</b>
       </span>
       <!-- 订单状态为 已完成(5)或已取消(6)时可以删除订单 -->
       <a
@@ -89,6 +89,7 @@
 <script>
 import useCountDown from "@/hooks/useCountDown";
 import { orderStatus } from "@/api/constants";
+import dayjs from "dayjs";
 
 export default {
   name: "OrderItem",
@@ -100,13 +101,13 @@ export default {
   },
   setup(props) {
     // 获取倒计时
-    const { timeText, start } = useCountDown();
+    const { count: timeText, start } = useCountDown();
     // 如果当前订单为待付款
     if (props.order.orderState === 1) {
       // 开启计时器
       start(props.order.countdown);
     }
-    return { orderStatus, timeText, start };
+    return { orderStatus, timeText, start, dayjs };
   },
 };
 </script>
