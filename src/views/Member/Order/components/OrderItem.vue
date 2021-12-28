@@ -74,7 +74,13 @@
         <p>
           <RouterLink :to="`/member/order/${order.id}`">查看详情</RouterLink>
         </p>
-        <p v-if="order.orderState === 1"><a href="javascript:;">取消订单</a></p>
+        <p v-if="order.orderState === 1">
+          <a
+            href="javascript:;"
+            @click="onCancelOrderButtonClickHandler(order.id)"
+            >取消订单</a
+          >
+        </p>
         <p v-if="[2, 3, 4, 5].includes(order.orderState)">
           <a href="javascript:;">再次购买</a>
         </p>
@@ -99,7 +105,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     // 获取倒计时
     const { count: timeText, start } = useCountDown();
     // 如果当前订单为待付款
@@ -107,7 +113,18 @@ export default {
       // 开启计时器
       start(props.order.countdown);
     }
-    return { orderStatus, timeText, start, dayjs };
+    // 当用户点击取消订单按钮时
+    const onCancelOrderButtonClickHandler = (id) => {
+      emit("onCancelOrder", id);
+    };
+
+    return {
+      orderStatus,
+      timeText,
+      start,
+      dayjs,
+      onCancelOrderButtonClickHandler,
+    };
   },
 };
 </script>

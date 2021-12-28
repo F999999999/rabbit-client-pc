@@ -52,3 +52,15 @@ export const submitOrderApi = (order) => {
 export const getOrderInfoByIdApi = (id) => {
   return requestWithToken(`/member/order/${id}`, "get");
 };
+
+/**
+ * 取消订单
+ * @param id 订单ID
+ * @param cancelReason 取消原因
+ * @returns {Promise}
+ */
+export const cancelOrderApi = ({ id, cancelReason }) => {
+  return requestWithToken(`/member/order/${id}/cancel`, "put", {
+    cancelReason,
+  });
+};

@@ -19,6 +19,7 @@
             :order="item"
             v-for="item in orderList.items"
             :key="item.id"
+            @onCancelOrder="onCancelOrderHandler(item.id)"
           />
         </div>
         <!-- 分页 -->
@@ -28,6 +29,8 @@
           :pageSize="reqParams.pageSize"
           :count="totalCount"
         />
+        <!-- 取消订单弹框 -->
+        <CancelOrder ref="cancelOrderComponent" @onReloadOrderList="getData" />
       </div>
     </div>
   </AppMemberLayout>
@@ -39,14 +42,15 @@ import { ref, watch } from "vue";
 import { orderStatus } from "@/api/constants";
 import { getOrderListApi } from "@/api/member";
 import OrderItem from "@/views/Member/Order/components/OrderItem";
+import CancelOrder from "@/views/Member/Order/components/CancelOrder";
 
 export default {
   name: "OrderListPage.vue",
-  components: { OrderItem, AppMemberLayout },
+  components: { CancelOrder, OrderItem, AppMemberLayout },
   setup() {
     const active = ref(0);
     // 获取订单列表数据
-    const { orderList, reqParams, loading, totalCount, totalPage } =
+    const { orderList, reqParams, loading, totalCount, totalPage, getData } =
       useOrderList();
 
     // 监听用户点击选项卡
@@ -57,6 +61,16 @@ export default {
       reqParams.value.page = 1;
     });
 
+    // 取消订单弹层组件实例对象
+    const cancelOrderComponent = ref();
+    // 当用户点击取消按钮时
+    const onCancelOrderHandler = (id) => {
+      // 渲染取消订单弹层
+      cancelOrderComponent.value.visible = true;
+      // 通过组件实例对象传递要取消订单的订单ID
+      cancelOrderComponent.value.id = id;
+    };
+
     return {
       active,
       orderStatus,
@@ -65,6 +79,9 @@ export default {
       reqParams,
       totalCount,
       totalPage,
+      cancelOrderComponent,
+      onCancelOrderHandler,
+      getData,
     };
   },
 };
@@ -104,6 +121,7 @@ const useOrderList = () => {
     loading,
     totalCount,
     totalPage,
+    getData,
   };
 };
 </script>
