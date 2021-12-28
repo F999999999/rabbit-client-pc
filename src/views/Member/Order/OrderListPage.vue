@@ -7,10 +7,26 @@
         </XtxTabTitle>
       </XtxTabs>
       <div class="order-list">
-        <OrderItem
-          :order="item"
-          v-for="item in orderList.items"
-          :key="item.id"
+        <!-- 正在加载 -->
+        <div class="loading" v-if="loading"></div>
+        <!-- 暂无数据 -->
+        <div v-if="!loading && orderList?.items.length === 0" class="none">
+          暂无数据
+        </div>
+        <!-- 订单列表 -->
+        <div class="order-list" v-if="orderList && !loading">
+          <OrderItem
+            :order="item"
+            v-for="item in orderList.items"
+            :key="item.id"
+          />
+        </div>
+        <!-- 分页 -->
+        <XtxPagination
+          v-if="orderList && totalPage > 1"
+          v-model:page="reqParams.page"
+          :pageSize="reqParams.pageSize"
+          :count="totalCount"
         />
       </div>
     </div>
@@ -30,28 +46,65 @@ export default {
   setup() {
     const active = ref(0);
     // 获取订单列表数据
-    const { orderList } = useOrderList();
+    const { orderList, reqParams, loading, totalCount, totalPage } =
+      useOrderList();
 
-    return { active, orderStatus, orderList };
+    // 监听用户点击选项卡
+    watch(active, (current) => {
+      // 重置订单状态参数
+      reqParams.value.orderState = current;
+      // 重置页码参数
+      reqParams.value.page = 1;
+    });
+
+    return {
+      active,
+      orderStatus,
+      orderList,
+      loading,
+      reqParams,
+      totalCount,
+      totalPage,
+    };
   },
 };
 
 // 获取订单列表数据
 const useOrderList = () => {
+  // 订单列表数据加载状态
+  const loading = ref(false);
   // 订单列表数据
   const orderList = ref([]);
   // 请求参数
   const reqParams = ref({ page: 1, pageSize: 10, orderState: 0 });
+  // 总数据条数
+  const totalCount = ref(0);
+  // 总页数
+  const totalPage = ref(0);
   // 获取订单列表数据
   const getData = () => {
+    // 加载中
+    loading.value = true;
     getOrderListApi(reqParams.value).then((res) => {
       orderList.value = res.result;
+      // 更新总数据条数
+      totalCount.value = res.result.counts;
+      // 更新总页数
+      totalPage.value = res.result.pages;
+      // 加载完成
+      loading.value = false;
     });
   };
   // 监听请求参数变化后重新获取订单列表数据
   watch(reqParams.value, getData, { immediate: true });
 
-  return { orderList, reqParams };
+  return {
+    orderList,
+    reqParams,
+    loading,
+    totalCount,
+    totalPage,
+  };
 };
 </script>
 
@@ -206,5 +259,24 @@ const useOrderList = () => {
       }
     }
   }
+}
+
+.loading {
+  height: calc(100% - 60px);
+  width: 100%;
+  min-height: 400px;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  background: rgba(255, 255, 255, 0.9) url(../../../assets/images/loading.gif)
+    no-repeat center 18%;
+}
+
+.none {
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
+  color: #999;
+  background: rgba(255, 255, 255, 0.9);
 }
 </style>
