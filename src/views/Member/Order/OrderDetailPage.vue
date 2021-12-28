@@ -1,6 +1,6 @@
 <template>
   <AppMemberLayout>
-    <div class="order-detail-page">
+    <div class="order-detail-page" v-if="orderDetail">
       <!-- 操作栏 -->
       <DetailAction :orderDetail="orderDetail" :getOrderDetail="getData" />
       <!-- 步骤条-->
@@ -23,6 +23,12 @@
         ></XtxStepItem>
       </XtxSteps>
       <!-- 物流栏 -->
+      <Suspense>
+        <template v-slot:fallback>loading...</template>
+        <template v-slot:default>
+          <DetailLogistics v-if="[3, 4, 5].includes(orderDetail.orderState)" />
+        </template>
+      </Suspense>
       <!-- 订单商品信息 -->
     </div>
   </AppMemberLayout>
@@ -34,10 +40,11 @@ import { useRoute } from "vue-router";
 import { ref } from "vue";
 import { getOrderDetailApi } from "@/api/member";
 import DetailAction from "@/views/Member/Order/components/DetailAction";
+import DetailLogistics from "@/views/Member/Order/components/DetailLogistics";
 
 export default {
   name: "OrderDetailPage",
-  components: { DetailAction, AppMemberLayout },
+  components: { DetailLogistics, DetailAction, AppMemberLayout },
   setup() {
     // 获取订单详情
     const { orderDetail, getData } = useOrderDetail();
