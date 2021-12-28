@@ -57,7 +57,6 @@ const useCollection = () => {
   // 发送请求获取数据
   getCollectionApi({ pageSize: 4 }).then((res) => {
     collection.value = res.result;
-    console.log(res, "collection");
   });
 
   return { collection };
@@ -70,7 +69,6 @@ const useBrowseHistory = () => {
   // 发送请求获取数据
   getBrowseHistoryApi({ pageSize: 4 }).then((res) => {
     browseHistory.value = res.result;
-    console.log(res, "browseHistory");
   });
 
   return { browseHistory };
