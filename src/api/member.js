@@ -52,3 +52,12 @@ export const getOrderListApi = ({ page, pageSize, orderState }) => {
 export const getLogisticsByOrderIdApi = (id) => {
   return requestWithToken(`/member/order/${id}/logistics`, "get");
 };
+
+/**
+ * 获取订单详情
+ * @param id
+ * @returns {Promise}
+ */
+export const getOrderDetailApi = (id) => {
+  return requestWithToken(`/member/order/${id}`, "get");
+};
