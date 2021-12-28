@@ -19,8 +19,9 @@
             :order="item"
             v-for="item in orderList.items"
             :key="item.id"
-            @onCancelOrder="onCancelOrderHandler(item.id)"
+            @onCancelOrder="onCancelOrderHandler"
             @onReloadOrderList="getData"
+            @onViewLogistics="onViewLogisticsHandler"
           />
         </div>
         <!-- 分页 -->
@@ -32,6 +33,8 @@
         />
         <!-- 取消订单弹框 -->
         <CancelOrder ref="cancelOrderComponent" @onReloadOrderList="getData" />
+        <!-- 查看物流弹框 -->
+        <OrderLogistics ref="OrderLogisticsComponent" />
       </div>
     </div>
   </AppMemberLayout>
@@ -41,13 +44,14 @@
 import AppMemberLayout from "@/components/AppMemberLayout";
 import { ref, watch } from "vue";
 import { orderStatus } from "@/api/constants";
-import { getOrderListApi } from "@/api/member";
+import { getLogisticsByOrderIdApi, getOrderListApi } from "@/api/member";
 import OrderItem from "@/views/Member/Order/components/OrderItem";
 import CancelOrder from "@/views/Member/Order/components/CancelOrder";
+import OrderLogistics from "@/views/Member/Order/components/OrderLogistics";
 
 export default {
   name: "OrderListPage.vue",
-  components: { CancelOrder, OrderItem, AppMemberLayout },
+  components: { OrderLogistics, CancelOrder, OrderItem, AppMemberLayout },
   setup() {
     const active = ref(0);
     // 获取订单列表数据
@@ -72,6 +76,19 @@ export default {
       cancelOrderComponent.value.id = id;
     };
 
+    // 查看物流弹框组件实例对象
+    const OrderLogisticsComponent = ref();
+    // 当用户点击查看物流按钮时
+    const onViewLogisticsHandler = (id) => {
+      // 渲染查看物流弹框组件
+      OrderLogisticsComponent.value.visible = true;
+      // 获取订单物流信息
+      getLogisticsByOrderIdApi(id).then((data) => {
+        // 存储订单物流信息
+        OrderLogisticsComponent.value.logistics = data.result;
+      });
+    };
+
     return {
       active,
       orderStatus,
@@ -83,6 +100,8 @@ export default {
       cancelOrderComponent,
       onCancelOrderHandler,
       getData,
+      OrderLogisticsComponent,
+      onViewLogisticsHandler,
     };
   },
 };

@@ -46,7 +46,13 @@
           {{ orderStatus[order.orderState].label }}
         </p>
         <p v-if="order.orderState === 3">
-          <a href="javascript:;" class="green">查看物流</a>
+          <a
+            href="javascript:;"
+            class="green"
+            @click="onViewLogisticsButtonClickHandler(order.id)"
+          >
+            查看物流
+          </a>
         </p>
         <p v-if="order.orderState === 4">
           <a href="javascript:;" class="green">评价商品</a>
@@ -150,6 +156,10 @@ export default {
         Message({ type: "warn", text: "确认收货失败" });
       }
     };
+    // 当用户点击查看物流按钮时
+    const onViewLogisticsButtonClickHandler = (id) => {
+      emit("onViewLogistics", id);
+    };
 
     return {
       orderStatus,
@@ -159,6 +169,7 @@ export default {
       onCancelOrderButtonClickHandler,
       onDeleteOrderButtonClickHandler,
       onConfirmReceiptButtonClickHandler,
+      onViewLogisticsButtonClickHandler,
     };
   },
 };

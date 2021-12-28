@@ -43,3 +43,12 @@ export const getOrderListApi = ({ page, pageSize, orderState }) => {
     orderState,
   });
 };
+
+/**
+ * 获取订单物流信息
+ * @param id 订单ID
+ * @returns {Promise}
+ */
+export const getLogisticsByOrderIdApi = (id) => {
+  return requestWithToken(`/member/order/${id}/logistics`, "get");
+};
