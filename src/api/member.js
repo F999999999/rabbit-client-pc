@@ -29,6 +29,13 @@ export const getBrowseHistoryApi = ({ page = 1, pageSize = 10 }) => {
   return requestWithToken("/member/browseHistory", "get", { page, pageSize });
 };
 
+/**
+ * 获取订单列表
+ * @param page 页码
+ * @param pageSize 每页显示数据量
+ * @param orderState 订单状态 0.全部 1.待付款 2.待发货 3.待收货 4.待评价 5.已完成 6.已取消
+ * @returns {Promise}
+ */
 export const getOrderListApi = ({ page, pageSize, orderState }) => {
   return requestWithToken("/member/order", "get", {
     page,
