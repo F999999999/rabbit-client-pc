@@ -20,6 +20,7 @@
             v-for="item in orderList.items"
             :key="item.id"
             @onCancelOrder="onCancelOrderHandler(item.id)"
+            @onReloadOrderList="getData"
           />
         </div>
         <!-- 分页 -->

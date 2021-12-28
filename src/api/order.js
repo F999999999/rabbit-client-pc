@@ -64,3 +64,12 @@ export const cancelOrderApi = ({ id, cancelReason }) => {
     cancelReason,
   });
 };
+
+/**
+ * 删除订单
+ * @param ids 订单ID集合
+ * @returns {Promise}
+ */
+export const deleteOrderApi = (ids) => {
+  return requestWithToken("/member/order", "delete", { ids });
+};

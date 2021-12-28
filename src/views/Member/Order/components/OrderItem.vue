@@ -15,6 +15,7 @@
         v-if="[5, 6].includes(order.orderState)"
         href="javascript:;"
         class="del"
+        @click="onDeleteOrderButtonClickHandler(order.id)"
       >
         删除
       </a>
@@ -78,8 +79,9 @@
           <a
             href="javascript:;"
             @click="onCancelOrderButtonClickHandler(order.id)"
-            >取消订单</a
           >
+            取消订单
+          </a>
         </p>
         <p v-if="[2, 3, 4, 5].includes(order.orderState)">
           <a href="javascript:;">再次购买</a>
@@ -96,6 +98,9 @@
 import useCountDown from "@/hooks/useCountDown";
 import { orderStatus } from "@/api/constants";
 import dayjs from "dayjs";
+import { deleteOrderApi } from "@/api/order";
+import Message from "@/components/library/Message";
+import Confirm from "@/components/library/Confirm";
 
 export default {
   name: "OrderItem",
@@ -117,6 +122,13 @@ export default {
     const onCancelOrderButtonClickHandler = (id) => {
       emit("onCancelOrder", id);
     };
+    // 当用户点击删除订单按钮时
+    const onDeleteOrderButtonClickHandler = async (id) => {
+      Confirm({ title: "温馨提示", content: "订单删除后不可恢复" })
+        .then(() => deleteOrderApi([id]))
+        .then(() => Message({ type: "success", text: "订单删除成功" }))
+        .then(() => emit("onReloadOrderList"));
+    };
 
     return {
       orderStatus,
@@ -124,6 +136,7 @@ export default {
       start,
       dayjs,
       onCancelOrderButtonClickHandler,
+      onDeleteOrderButtonClickHandler,
     };
   },
 };
