@@ -30,6 +30,7 @@
         </template>
       </Suspense>
       <!-- 订单商品信息 -->
+      <DetailOrderGoods :orderDetail="orderDetail" />
     </div>
   </AppMemberLayout>
 </template>
@@ -41,10 +42,16 @@ import { ref } from "vue";
 import { getOrderDetailApi } from "@/api/member";
 import DetailAction from "@/views/Member/Order/components/DetailAction";
 import DetailLogistics from "@/views/Member/Order/components/DetailLogistics";
+import DetailOrderGoods from "@/views/Member/Order/components/DetailOrderGooods";
 
 export default {
   name: "OrderDetailPage",
-  components: { DetailLogistics, DetailAction, AppMemberLayout },
+  components: {
+    DetailOrderGoods,
+    DetailLogistics,
+    DetailAction,
+    AppMemberLayout,
+  },
   setup() {
     // 获取订单详情
     const { orderDetail, getData } = useOrderDetail();
