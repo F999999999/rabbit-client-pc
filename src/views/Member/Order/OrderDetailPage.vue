@@ -4,6 +4,24 @@
       <!-- 操作栏 -->
       <DetailAction :orderDetail="orderDetail" :getOrderDetail="getData" />
       <!-- 步骤条-->
+      <XtxSteps
+        :active="orderDetail.orderState === 6 ? 1 : orderDetail.orderState"
+      >
+        <XtxStepItem
+          title="提交订单"
+          :desc="orderDetail.createTime"
+        ></XtxStepItem>
+        <XtxStepItem title="付款成功" :desc="orderDetail.payTime"></XtxStepItem>
+        <XtxStepItem
+          title="商品发货"
+          :desc="orderDetail.consignTime"
+        ></XtxStepItem>
+        <XtxStepItem title="确认收货" :desc="orderDetail.endTime"></XtxStepItem>
+        <XtxStepItem
+          title="订单完成"
+          :desc="orderDetail.evaluationTime"
+        ></XtxStepItem>
+      </XtxSteps>
       <!-- 物流栏 -->
       <!-- 订单商品信息 -->
     </div>
