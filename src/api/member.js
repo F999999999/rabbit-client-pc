@@ -28,3 +28,11 @@ export const getCollectionApi = ({
 export const getBrowseHistoryApi = ({ page = 1, pageSize = 10 }) => {
   return requestWithToken("/member/browseHistory", "get", { page, pageSize });
 };
+
+export const getOrderListApi = ({ page, pageSize, orderState }) => {
+  return requestWithToken("/member/order", "get", {
+    page,
+    pageSize,
+    orderState,
+  });
+};

@@ -7,60 +7,11 @@
         </XtxTabTitle>
       </XtxTabs>
       <div class="order-list">
-        <div class="order-item">
-          <div class="head">
-            <span>下单时间：2021-09-25 08:33:30</span>
-            <span>订单编号：1441561463234760705</span>
-            <span class="down-time">
-              <i class="iconfont icon-down-time"></i>
-              <b>付款截止：28分32秒</b>
-            </span>
-            <a href="javascript:" class="del">删除</a>
-          </div>
-          <div class="body">
-            <div class="column goods">
-              <ul>
-                <li v-for="i in 2" :key="i">
-                  <a class="image" href="javascript:">
-                    <img
-                      src="https://yanxuan-item.nosdn.127.net/a67e6f85a4fc128ab3a2efad5279ca15.png"
-                      alt=""
-                    />
-                  </a>
-                  <div class="info">
-                    <p class="name ellipsis-2">
-                      不烫手的茶杯双层隔热茶水杯绿茶杯
-                    </p>
-                    <p class="attr ellipsis">
-                      <span>容量:2只装 </span>
-                    </p>
-                  </div>
-                  <div class="price">¥89</div>
-                  <div class="count">x1</div>
-                </li>
-              </ul>
-            </div>
-            <div class="column state">
-              <p>待付款</p>
-              <a href="javascript:" class="green">查看物流</a>
-              <a href="javascript:" class="green">评价商品</a>
-              <a href="javascript:" class="green">查看评价</a>
-            </div>
-            <div class="column amount">
-              <p class="red">¥93</p>
-              <p>（含运费：¥4）</p>
-              <p>在线付款</p>
-            </div>
-            <div class="column action">
-              <XtxButton type="primary" size="small">立即付款</XtxButton>
-              <XtxButton type="primary" size="small">确认收货</XtxButton>
-              <p><a href="javascript:">查看详情</a></p>
-              <p><a href="javascript:">取消订单</a></p>
-              <p><a href="javascript:">再次购买</a></p>
-              <p><a href="javascript:">申请售后</a></p>
-            </div>
-          </div>
-        </div>
+        <OrderItem
+          :order="item"
+          v-for="item in orderList.items"
+          :key="item.id"
+        />
       </div>
     </div>
   </AppMemberLayout>
@@ -68,17 +19,39 @@
 
 <script>
 import AppMemberLayout from "@/components/AppMemberLayout";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { orderStatus } from "@/api/constants";
+import { getOrderListApi } from "@/api/member";
+import OrderItem from "@/views/Member/Order/components/OrderItem";
 
 export default {
   name: "OrderListPage.vue",
-  components: { AppMemberLayout },
+  components: { OrderItem, AppMemberLayout },
   setup() {
     const active = ref(0);
+    // 获取订单列表数据
+    const { orderList } = useOrderList();
 
-    return { orderStatus, active };
+    return { active, orderStatus, orderList };
   },
+};
+
+// 获取订单列表数据
+const useOrderList = () => {
+  // 订单列表数据
+  const orderList = ref([]);
+  // 请求参数
+  const reqParams = ref({ page: 1, pageSize: 10, orderState: 0 });
+  // 获取订单列表数据
+  const getData = () => {
+    getOrderListApi(reqParams.value).then((res) => {
+      orderList.value = res.result;
+    });
+  };
+  // 监听请求参数变化后重新获取订单列表数据
+  watch(reqParams.value, getData, { immediate: true });
+
+  return { orderList, reqParams };
 };
 </script>
 
