@@ -23,8 +23,8 @@
 
 <script>
 import AppMemberLayout from "@/components/AppMemberLayout";
-import MemberHomeOverview from "@/views/Member/components/MemberHomeOverview";
-import MemberHomePanel from "@/views/Member/components/MemberHomePanel";
+import MemberHomeOverview from "@/views/Member/Home/components/MemberHomeOverview";
+import MemberHomePanel from "@/views/Member/Home/components/MemberHomePanel";
 import GoodsRelevant from "@/views/Goods/components/GoodsRelevant";
 import { ref } from "vue";
 import { getCollectionApi } from "@/api/member";

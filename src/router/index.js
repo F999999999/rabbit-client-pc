@@ -11,10 +11,10 @@ const CartPage = () => import("@/views/Cart/CartPage");
 const CheckoutPage = () => import("@/views/Pay/CheckoutPage");
 const PayPage = () => import("@/views/Pay/PayPage");
 const PayResultPage = () => import("@/views/Pay/PayResultPage");
-const MemberHomePage = () => import("@/views/Member/MemberHomePage");
-const OrderView = () => import("@/views/Member/OrderView");
-const OrderListPage = () => import("@/views/Member/OrderListPage");
-const OrderDetailPage = () => import("@/views/Member/OrderDetailPage");
+const MemberHomePage = () => import("@/views/Member/Home/MemberHomePage");
+const OrderView = () => import("@/views/Member/Order/OrderView");
+const OrderListPage = () => import("@/views/Member/Order/OrderListPage");
+const OrderDetailPage = () => import("@/views/Member/Order/OrderDetailPage");
 
 const routes = [
   // 首页
