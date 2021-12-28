@@ -73,3 +73,12 @@ export const cancelOrderApi = ({ id, cancelReason }) => {
 export const deleteOrderApi = (ids) => {
   return requestWithToken("/member/order", "delete", { ids });
 };
+
+/**
+ * 确认收货
+ * @param id 订单ID
+ * @returns {Promise}
+ */
+export const confirmReceiptGoodsApi = (id) => {
+  return requestWithToken(`/member/order/${id}/receipt`, "put");
+};

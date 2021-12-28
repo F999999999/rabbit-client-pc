@@ -69,7 +69,12 @@
         >
           立即付款
         </XtxButton>
-        <XtxButton v-if="order.orderState === 3" type="primary" size="small">
+        <XtxButton
+          v-if="order.orderState === 3"
+          type="primary"
+          size="small"
+          @click="onConfirmReceiptButtonClickHandler(order.id)"
+        >
           确认收货
         </XtxButton>
         <p>
@@ -98,7 +103,7 @@
 import useCountDown from "@/hooks/useCountDown";
 import { orderStatus } from "@/api/constants";
 import dayjs from "dayjs";
-import { deleteOrderApi } from "@/api/order";
+import { confirmReceiptGoodsApi, deleteOrderApi } from "@/api/order";
 import Message from "@/components/library/Message";
 import Confirm from "@/components/library/Confirm";
 
@@ -129,6 +134,22 @@ export default {
         .then(() => Message({ type: "success", text: "订单删除成功" }))
         .then(() => emit("onReloadOrderList"));
     };
+    // 当确认收货按钮被点击时
+    const onConfirmReceiptButtonClickHandler = async (id) => {
+      try {
+        // 确认弹框
+        await Confirm({ title: "确认收货", content: "确定要进行收货吗" });
+        // 发送请求进行确认收货
+        await confirmReceiptGoodsApi(id);
+        // 用户提示
+        Message({ type: "success", text: "确认收货成功" });
+        // 重新获取订单列表
+        emit("onReloadOrderList");
+      } catch (e) {
+        // 用户提示
+        Message({ type: "warn", text: "确认收货失败" });
+      }
+    };
 
     return {
       orderStatus,
@@ -137,6 +158,7 @@ export default {
       dayjs,
       onCancelOrderButtonClickHandler,
       onDeleteOrderButtonClickHandler,
+      onConfirmReceiptButtonClickHandler,
     };
   },
 };
