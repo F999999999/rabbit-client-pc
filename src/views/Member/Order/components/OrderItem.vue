@@ -24,7 +24,7 @@
       <div class="column goods">
         <ul>
           <li v-for="goods in order.skus" :key="goods.id">
-            <router-link class="image" :to="`/product/${goods.spuId}`">
+            <router-link class="image" :to="`/goods/${goods.spuId}`">
               <img :src="goods.image" alt="" />
             </router-link>
             <div class="info">
