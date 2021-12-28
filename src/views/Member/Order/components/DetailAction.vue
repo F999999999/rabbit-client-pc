@@ -48,7 +48,13 @@
       </template>
       <!-- 待收货 -->
       <template v-if="orderDetail.orderState === 3">
-        <XtxButton type="primary" size="small">确认收货</XtxButton>
+        <XtxButton
+          type="primary"
+          size="small"
+          @click="onConfirmReceiptButtonClickHandler(orderDetail.id)"
+        >
+          确认收货
+        </XtxButton>
         <XtxButton type="plain" size="small">再次购买</XtxButton>
       </template>
       <!-- 待评价 -->
@@ -76,6 +82,9 @@
 <script>
 import CancelOrder from "@/views/Member/Order/components/CancelOrder";
 import { ref } from "vue";
+import Confirm from "@/components/library/Confirm";
+import { confirmReceiptGoodsApi } from "@/api/order";
+import Message from "@/components/library/Message";
 
 export default {
   name: "DetailAction",
@@ -90,7 +99,7 @@ export default {
       default: () => {},
     },
   },
-  setup() {
+  setup(props) {
     // 取消订单弹框组件实例对象
     const cancelOrderComponent = ref();
     // 当用户点击取消按钮时
@@ -100,8 +109,28 @@ export default {
       // 通过组件实例对象传递要取消订单的订单ID
       cancelOrderComponent.value.id = id;
     };
+    // 当确认收货按钮被点击时
+    const onConfirmReceiptButtonClickHandler = async (id) => {
+      try {
+        // 和用户进行确认
+        await Confirm({ title: "确认收货", content: "确定要进行收货吗" });
+        // 发送请求进行确认收货
+        await confirmReceiptGoodsApi(id);
+        // 用户提示
+        Message({ type: "success", text: "确认收货成功" });
+        // 重新获取订单详情数据
+        props.getOrderDetail();
+      } catch (e) {
+        // 用户提示
+        Message({ type: "warn", text: "确认收货失败" });
+      }
+    };
 
-    return { onCancelOrderHandler, cancelOrderComponent };
+    return {
+      onCancelOrderHandler,
+      cancelOrderComponent,
+      onConfirmReceiptButtonClickHandler,
+    };
   },
 };
 </script>
