@@ -32,9 +32,16 @@
           :count="totalCount"
         />
         <!-- 取消订单弹框 -->
-        <CancelOrder ref="cancelOrderComponent" @onReloadOrderList="getData" />
+        <teleport to="#modal">
+          <CancelOrder
+            ref="cancelOrderComponent"
+            @onReloadOrderList="getData"
+          />
+        </teleport>
         <!-- 查看物流弹框 -->
-        <OrderLogistics ref="OrderLogisticsComponent" />
+        <teleport to="#modal">
+          <OrderLogistics ref="OrderLogisticsComponent" />
+        </teleport>
       </div>
     </div>
   </AppMemberLayout>

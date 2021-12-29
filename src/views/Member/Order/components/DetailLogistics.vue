@@ -8,7 +8,9 @@
       查看物流
     </a>
     <!-- 查看物流弹框 -->
-    <OrderLogistics ref="OrderLogisticsComponent" />
+    <teleport to="#modal">
+      <OrderLogistics ref="OrderLogisticsComponent" />
+    </teleport>
   </div>
 </template>
 <script>

@@ -96,10 +96,12 @@
       <!-- 已取消 -->
     </div>
     <!-- 取消订单弹框 -->
-    <CancelOrder
-      ref="cancelOrderComponent"
-      @onReloadOrderList="getOrderDetail(orderDetail.id)"
-    />
+    <teleport to="#modal">
+      <CancelOrder
+        ref="cancelOrderComponent"
+        @onReloadOrderList="getOrderDetail(orderDetail.id)"
+      />
+    </teleport>
   </div>
 </template>
 
